@@ -4,7 +4,7 @@ Who:
 Eric Speaker -- speakerofthehouse
 Brian Chung -- chungb2015
 Patrick Amato -- pro-respirator
-Davie White -- dwight9339
+David White -- dwight9339
 
 Title: ???
 
@@ -41,7 +41,12 @@ Methodology:
 Project Tracking software:
   We plan to use Trello as our tracking software and regular uploads to the github repository
   
-Project Plan:
+User Stories:
+1) As a casual music listener, I want to randomize my playlists so that I listen to a wider variety of music without hearing the same artists too often.
+
+2) As a DJ, I want to be able to customize how my shuffle algorithm chooses songs so that I can hear a variety of songs that fit a particular motif or mood.
+
+3) As an avid music listener, I want to choose how my shuffle algorithm selects which songs to play so that I can control what music I hear when I listen.
   
   
 
