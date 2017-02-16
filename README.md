@@ -6,13 +6,14 @@ Brian Chung -- chungb2015;
 Patrick Amato -- pro-respirator;
 David White -- dwight9339
 
-Title: ???
+Title: Shuffle+
 
 Description: 
   We are attempting to build/create a better music suffling algorithm, potentially if we have time at the end of the semester we would combine this with spotify and spotify features. Among these general improvements we want to make the shuffle more customizable by many or any topic you can rank music through. The main customizable feature would be to use some kind of ranking system to impact the shuffle.
 
 Vision Statement:
-
+  Your music however you want it.
+  
 Motivation:
   Our motivation is disatisfaction with some current shuffle algorithms and a desire to have more control over a music shuffle
   
