@@ -1,9 +1,9 @@
 # theAteam
 
 Who: 
-Eric Speaker -- speakerofthehouse
-Brian Chung -- chungb2015
-Patrick Amato -- pro-respirator
+Eric Speaker -- speakerofthehouse;
+Brian Chung -- chungb2015;
+Patrick Amato -- pro-respirator;
 David White -- dwight9339
 
 Title: ???
