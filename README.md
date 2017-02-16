@@ -48,9 +48,11 @@ User Stories:
 
 3) As an avid music listener, I want to choose how my shuffle algorithm selects which songs to play so that I can control what music I hear when I listen. 5 hours
   
-4. As a student in college, I want to modifiy my playlist so that I can shift from my studying music to my party music; 4 hours
-5. As a father of two children, I want to make changing playlists so that my children can listen to a variety of music without worrying about repeating; 6 hours
-6. As a runner, I want to listen to my favorite music so that I can let my mind drift in the music in the runs I do; 3 hours
+4) As a student in college, I want to modifiy my playlist so that I can shift from my studying music to my party music; 4 hours
+
+5) As a father of two children, I want to make changing playlists so that my children can listen to a variety of music without worrying about repeating; 6 hours
+
+6) As a runner, I want to listen to my favorite music so that I can let my mind drift in the music in the runs I do; 3 hours
 
 
 
