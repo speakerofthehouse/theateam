@@ -2,19 +2,9 @@
 <html>
     <head>
         <title>Shuffle+</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-        <script>
-          $(document).ready(function(){
-            var client_secret = '9d16385d5beb4eb9a5a65b5b27391b8a';
-            var url = 'https://accounts.spotify.com/authorize/?client_id=d739d37b250a4deb902355e3e4bbb32d&response_type=code&redirect_uri=http://shuffleplus.herokuapp.com/callback'
-            $.ajax({url:url, dataType:"json", crossDomain:true}).then(function(data) {
-              console.log(data);
-            });
-          })
-        </script>
     </head>
     <body>
         <h1>Shuffle+</h1>
-        <img id="albumart" alt="Could not find album art" src="" height=300 width=300 />
+        <iframe src="https://embed.spotify.com/?uri=spotify:track:2WwwR2iurJobKpTVEz9qHS&theme=white&view=coverart" frameborder="0" allowtransparency="true"></iframe>
     </body>
 </html>
