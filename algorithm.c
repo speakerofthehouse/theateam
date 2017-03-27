@@ -14,7 +14,7 @@ algorithm functions
 */
 
 int i = 0;
-void basic_play(queue playlist){ //void??
+__??__ basic_play(queue playlist){ //void??
 	while(playlist != is_empty){
 		p_len = sizeof(playlist);
 		for(int i = 0,i < p_len, i++ ){
@@ -23,12 +23,12 @@ void basic_play(queue playlist){ //void??
 	}
 }
 
-void basic_shuffle(queue playlist){
+__??___ basic_shuffle(queue playlist){
 	/*create the shuffle*/
 	//assuming queue element starts at 0 and increments --- so song 1 is q[0]
 	//currentsong = playlist[0];
 	//nextsong = playlist[1];
-	array b_s_list = [];
+	//array b_s_list = [];
 
 	int x = 0;	//bslist spot
 	int p_len = sizeof(playlist);	
@@ -36,19 +36,89 @@ void basic_shuffle(queue playlist){
 	while(y != 0){
 		lv = rand() % p_len; //pick a random number from the playlist to add into the queue
 		/*add song and "remove it from the old list*/
-		b_s_list[x] = playlist[lv];
-		while(int z = lv; z < p_len; z++){
-			playlist[z] = playlist[z+1];
+		if(b_s_list[x-1].artist != playlist[lv].artist ){
+			b_s_list[x] = playlist[lv];
+			while(int z = lv; z < p_len; z++){
+				playlist[z] = playlist[z+1];
+			}
+			x++;
+			y--;
+			p_len--;		
 		}
-		x++;
-		y--;
-		p_len--;		
+		
 	}
  	/*run the shuffle*/
 		--inside or outside the function??? -- main??
 }
 
 
+__??__ ranked_shuffle(queue playlist){
+	/*ranking of each song from 1-5, each song gets 1 entry per ranking --> rank1 = 1 entry, rank 5 = 5 entries.*/
+	//r_shuffle
+	int x = 0; //playlist counter
+	int y = 0; //r_s_list counter
+	p_len = sizeof(playlist);
+	/*adding songs based on ranking*/
+	while(playlist != empty){
+		while(int x = 0; x < p_len; x++){
+			if(playlist[x].ranking == 1){
+				r_s_list[y] = playlist[x];
+				x++;
+				y++;
+			}
+			else if(playlist[x].ranking == 2){
+				r_s_list[y] = playlist[x];
+				r_s_list[y+1] = playlist[x];
+				x++;
+				y=y+2;			
+			}
+			else if(playlist[x].ranking == 3){
+				r_s_list[y] = playlist[x];
+				r_s_list[y+1] = playlist[x];
+				r_s_list[y+2] = playlist[x];
+				x++;
+				y=y+3;			
+			}
+			else if(playlist[x].ranking == 4){
+				r_s_list[y] = playlist[x];
+				r_s_list[y+1] = playlist[x];
+				r_s_list[y+2] = playlist[x];
+				r_s_list[y+3] = playlist[x];
+				x++;
+				y=y+4;
+			}
+			else{//playlist[x].ranking == 5
+				r_s_list[y] = playlist[x];
+				r_s_list[y+1] = playlist[x];
+				r_s_list[y+2] = playlist[x];
+				r_s_list[y+3] = playlist[x];
+				r_s_list[y+4] = playlist[x];				
+				x++;
+				y=y+5;			
+			} 		
+		}
+	}
+
+	int x = 0;	//rlist spot
+	int p_len = sizeof(playlist);	
+	int y = p_len;	//oldlist counter
+	while(y != 0){
+		lv = rand() % p_len; //pick a random number from the playlist to add into the queue
+		/*add song and "remove it from the old list*/
+		if(b_s_list[x-1].artist != playlist[lv].artist ){
+			b_s_list[x] = playlist[lv];
+			while(int z = lv; z < p_len; z++){
+				playlist[z] = playlist[z+1];
+			}			
+			x++;
+			y--;
+			p_len--;		
+		}		
+	}
+ 	/*run the shuffle*/
+		--inside or outside the function??? -- main??
+
+}
 
 
 void main(){
@@ -98,4 +168,3 @@ void main(){
 	}
 		
 }
-
