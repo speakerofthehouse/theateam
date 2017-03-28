@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include ../partials/head %>
+</head>
+<body>
+  <h1>Welcome, <%= name %>!</h1>
+  <h2>Your Playlists:</h2>
+  <ul>
+    <% playlists.forEach(function(playlist){ %>
+      <li><%= playlist.name %></li> 
+    <% }); %>
+  </ul>
+</body>
+</html>
