@@ -5,11 +5,7 @@
 </head>
 <body>
   <h1>Welcome, <%= name %>!</h1>
-  <h2>Your Playlists:</h2>
-  <ul>
-    <% playlists.forEach(function(playlist){ %>
-      <li><%= playlist.name %></li> 
-    <% }); %>
-  </ul>
+  <% include ../partials/playlists %>
+  <div id="tl-div"></div>
 </body>
 </html>

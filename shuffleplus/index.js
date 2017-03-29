@@ -15,9 +15,9 @@ app.set('port', (process.env.PORT || 5000));
 //Render views in public directory
 app.use(express.static(__dirname + '/public')).use(cookieParser());;
 
-var client_id = '[insert client id here]'; 
-var client_secret = '[insert client secret here]'; 
-var redirect_uri = 'http://localhost:5000/callback'; 
+var client_id = '[insert client id here]'; // Your client id
+var client_secret = '[insert client secret here]'; // Your secret
+var redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
 var stateKey = 'spotify_auth_state';
 
 //Used for creating state strings
@@ -93,31 +93,20 @@ app.get('/callback', function(req, res) {
           json: true
         };
        request.get(options, function(error, response, body) {
-         console.log(body);
           var user_name = body.display_name;
           var user_id = body.id;
           options.url = 'https://api.spotify.com/v1/users/' + user_id + '/playlists';
-          console.log(options);
           request.get(options, function(error, response, body) {
             res.render('pages/main', {
               name: user_name,
-              playlists: body.items
+              playlists: body.items,
+              user_id: user_id,
+              access_token: access_token,
             });
           });
         });
-        /* use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
-
-        // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            access_token: access_token,
-            refresh_token: refresh_token
-          }));*/
       } else {
-        console.log("Authorization error")
+        console.log("Authorization error");
       }
     });
   }
@@ -147,6 +136,24 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
+app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
+  var playlist_id = req.params.playlist_id;
+  var access_token = req.params.access_token;
+  var user_id = req.params.user_id;
+
+  var options = {
+     url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
+     headers: { 'Authorization': 'Bearer ' + access_token },
+     json: true
+   };
+
+   request.get(options, function(error, response, body) {
+     console.log(body);
+     res.render('partials/tracklist', {
+       songs: body.items
+     });
+   });
+});
 
 //Listen for requests
 app.listen(app.get('port'), function() {

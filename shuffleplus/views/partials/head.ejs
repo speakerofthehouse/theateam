@@ -1,2 +1,15 @@
 <meta charset="UTF-8">
 <title>Shuffle+</title>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script>
+      var renderTracklist = function(caller){
+        var playlist_id = caller.getAttribute("id");
+        $.ajax({
+          url: "http://localhost:5000/get-tracks/<%= user_id %>/" + playlist_id + "/<%= access_token %>",
+          context: document.body,
+          success: function(res){
+            $("#tl-div").html(res);
+          }
+        });
+      };
+</script>
