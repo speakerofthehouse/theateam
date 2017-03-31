@@ -15,9 +15,9 @@ app.set('port', (process.env.PORT || 5000));
 //Render views in public directory
 app.use(express.static(__dirname + '/public')).use(cookieParser());;
 
-var client_id = '[insert client id here]'; // Your client id
-var client_secret = '[insert client secret here]'; // Your secret
-var redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
+var client_id = '[insert client id]';
+var client_secret = '[insert client secret]';
+var redirect_uri = 'http://localhost:5000/callback';
 var stateKey = 'spotify_auth_state';
 
 //Used for creating state strings
@@ -36,12 +36,12 @@ app.get('/', function(req, res){
   res.render('pages/login');
 });
 
+//Request login code
 app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
   var scope = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
@@ -53,10 +53,8 @@ app.get('/login', function(req, res) {
     }));
 });
 
+//Request access and refresh tokens
 app.get('/callback', function(req, res) {
-
-  // your application requests refresh and access tokens
-  // after checking the state parameter
 
   var code = req.query.code || null;
   var state = req.query.state || null;
@@ -102,6 +100,7 @@ app.get('/callback', function(req, res) {
               playlists: body.items,
               user_id: user_id,
               access_token: access_token,
+              refresh_token: refresh_token
             });
           });
         });
@@ -112,9 +111,8 @@ app.get('/callback', function(req, res) {
   }
 });
 
-app.get('/refresh_token', function(req, res) {
-
-  // requesting access token from refresh token
+//Get new access token from request token
+app.get('/refresh_token/:refresh_token', function(req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
@@ -136,6 +134,7 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
+//Get playlist tracks from Spotify and render a new tracklist partial
 app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
   var playlist_id = req.params.playlist_id;
   var access_token = req.params.access_token;
@@ -147,11 +146,38 @@ app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
      json: true
    };
 
+   //GET tracks
    request.get(options, function(error, response, body) {
      console.log(body);
      res.render('partials/tracklist', {
        songs: body.items
      });
+   });
+});
+
+//Shuffle the tracks in a playlist according to the specified option
+app.get('/shuffle/:user_id/:playlist_id/:access_token/:option', function(req, res){
+  var playlist_id = req.params.playlist_id;
+  var access_token = req.params.access_token;
+  var user_id = req.params.user_id;
+  var option = req.params.option;
+
+  var options = {
+     url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
+     headers: { 'Authorization': 'Bearer ' + access_token },
+     json: true
+   };
+
+   //GET tracks
+   request.get(options, function(error, response, body) {
+     var entries = body.items;  //Array of playlist entry objects
+     var length = body.total;   //Length of playlist
+     var tracks = [];           //Array of track objects in playlist
+     for (i = 0; i < length; i++){
+       //Ex-track-t track elements from playlist entries
+       tracks[i] = entries[i].track;
+     }
+     /***Shuffle function(s) to go here***/
    });
 });
 

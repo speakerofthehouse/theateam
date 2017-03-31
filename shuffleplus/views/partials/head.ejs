@@ -1,14 +1,26 @@
 <meta charset="UTF-8">
 <title>Shuffle+</title>
+<link type="text/css" rel="stylesheet" href="basicstyle.css" />
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
       var renderTracklist = function(caller){
+        //Get tracklist id from html button element
         var playlist_id = caller.getAttribute("id");
+        //Call the get-tracks endpoint with the given playlist's id
         $.ajax({
           url: "http://localhost:5000/get-tracks/<%= user_id %>/" + playlist_id + "/<%= access_token %>",
           context: document.body,
           success: function(res){
+            //Append the returned html to the tracklist div
             $("#tl-div").html(res);
+
+            //Make a Spotify play button widget and prepend it to the tracklist div
+            var src = "https://embed.spotify.com/?uri=spotify:user:" + <%= user_id %> + ":playlist:" + playlist_id + "&theme=white&view=coverart"
+            var player = document.createElement("iframe");
+            player.setAttribute("src", src);
+            player.setAttribute("frameborder", "0");
+            player.setAttribute("allowtransparency", "true");
+            $("#tl-div").prepend(player);
           }
         });
       };
