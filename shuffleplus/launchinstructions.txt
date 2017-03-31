@@ -1,0 +1,6 @@
+1. Replace respective variables in index.js with the shuffle+ client id and 
+   client secret
+
+2. Start app from console with commmand "node index.js"
+
+3. In a browser, type in url "localhost:5000"
