@@ -32,4 +32,4 @@ Postcondition
   User has authenticated access to Spotify account
 
 Test Screenshot:
-  ![Test Output](./img.jpg?raw=true "Title")
+  ![Test Output](./logintest.png?raw=true "Title")
