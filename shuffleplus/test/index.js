@@ -5,8 +5,11 @@ const request = require("request");
 const supertest = require("supertest");
 const index = require("../index");
 
+//Create a local test server to test api endpoints
+var server = supertest.agent("http://localhost:8000");
 
-describe("Gets API Login Code", function(){
+//Tests all functions involved in authenticating a user
+describe("Authenticate User", function(){
   describe("Random String Generator", function(){
     it("Generates random strings of correct length", function(){
       var random1 = index.generateRandomString(10);
@@ -24,5 +27,30 @@ describe("Gets API Login Code", function(){
       expect(random1).to.not.equal(random2);
     })
   });
+
+  describe("Fetch Login Page", function(){
+    it("Returns the login page", function(){
+      server
+        .get("/")
+        .expect("Content-type", /html/) //Check that html renders
+        .expect(200)                    //Check response ok
+        .end(function(err, res){
+          expect(res.status).to.equal(200);
+          expect(res.body.error).to.equal(false);
+          done();
+        });
+      });
+  });
+
+    describe("Gets and Access and Refresh Tokens from Spotify", function(){
+      it("Recieves Tokens", function(){
+        request.get("http://localhost:8000/login", function(res){
+          expect(res.status).to.equal(200);
+          //Check that server returns tokens
+          expect(res.access_token).to.not.equal(undefined);
+          expect(res.refresh_token).to.not.equal(undefined);
+        });
+      });
+    });
 
 });
