@@ -32,6 +32,8 @@ var generateRandomString = function(length) {
   return text;
 };
 
+module.exports.generateRandomString = generateRandomString;
+
 //Routes
 app.get('/', function(req, res){
   res.render('pages/login');
@@ -207,7 +209,6 @@ app.get('/shuffle/:user_id/:playlist_id/:access_token', function(req, res){
       }
       done = false;
     }
-    deasync.sleep(1000);
     res.send("Shuffle Success");
     console.log("Finished shuffles");
    });

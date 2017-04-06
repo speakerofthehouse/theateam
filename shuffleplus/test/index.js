@@ -1,7 +1,13 @@
 //Unit test for index.js using mocha
-  const expect = require("chai").expect;
-  const index = require("../index");
+const expect = require("chai").expect;
+const app = require("express");
+const request = require("request");
+const supertest = require("supertest");
+const index = require("../index");
 
+var server = supertest.agent("http://localhost:5000")
+
+describe("Gets API Login Code", function(){
   describe("Random String Generator", function(){
     it("Generates random strings of correct length", function(){
       var random1 = index.generateRandomString(10);
@@ -15,7 +21,17 @@
     it("Random strings do not match", function(){
       var random1 = index.generateRandomString(16);
       var random2 = index.generateRandomString(16);
-      
+
       expect(random1).to.not.equal(random2);
     })
   });
+
+  describe("Set Cookies", function(){
+    var random = index.generateRandomString(16);
+    var cookie = "Empty string";
+
+    app.get("/", function(req, res){
+
+    })
+  });
+});
