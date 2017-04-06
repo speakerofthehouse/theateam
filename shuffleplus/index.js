@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('request');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
+const deasync = require('deasync');
 const app = express();
 
 //Get views from views folder and render pages as embedded js
@@ -15,8 +16,8 @@ app.set('port', (process.env.PORT || 5000));
 //Render views in public directory
 app.use(express.static(__dirname + '/public')).use(cookieParser());;
 
-var client_id = '[insert client id]';
-var client_secret = '[insert client secret]';
+var client_id = 'd739d37b250a4deb902355e3e4bbb32d';
+var client_secret = '9d16385d5beb4eb9a5a65b5b27391b8a';
 var redirect_uri = 'http://localhost:5000/callback';
 var stateKey = 'spotify_auth_state';
 
@@ -30,6 +31,8 @@ var generateRandomString = function(length) {
   }
   return text;
 };
+
+module.exports.generateRandomString = generateRandomString;
 
 //Routes
 app.get('/', function(req, res){
@@ -136,6 +139,7 @@ app.get('/refresh_token/:refresh_token', function(req, res) {
 
 //Get playlist tracks from Spotify and render a new tracklist partial
 app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
+  console.log("Called get-tracks");
   var playlist_id = req.params.playlist_id;
   var access_token = req.params.access_token;
   var user_id = req.params.user_id;
@@ -156,7 +160,7 @@ app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
 });
 
 //Shuffle the tracks in a playlist according to the specified option
-app.get('/shuffle/:user_id/:playlist_id/:access_token/:option', function(req, res){
+app.get('/shuffle/:user_id/:playlist_id/:access_token', function(req, res){
   var playlist_id = req.params.playlist_id;
   var access_token = req.params.access_token;
   var user_id = req.params.user_id;
