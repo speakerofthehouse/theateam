@@ -21,6 +21,26 @@
             player.setAttribute("frameborder", "0");
             player.setAttribute("allowtransparency", "true");
             $("#tl-div").prepend(player);
+            var shuffleBtn = document.createElement("button");
+            shuffleBtn.innerHTML = "Shuffle";
+            shuffleBtn.setAttribute("id", playlist_id);
+            shuffleBtn.setAttribute("onClick", "shufflePlaylist(this)");
+            $("#tl-div").prepend(shuffleBtn);
+          }
+        });
+      };
+
+      var shufflePlaylist = function(caller){
+        var playlist_id = caller.getAttribute("id");
+        $.ajax({
+          url: "http://localhost:5000/shuffle/<%= user_id %>/" + playlist_id +  "/<%= access_token %>",
+        }).done(function(data){
+          if (data === "Shuffle Success"){
+            console.log("Shuffle Success");
+            renderTracklist(caller);
+          }
+          else {
+            console.log("Shuffle Error");
           }
         });
       };
