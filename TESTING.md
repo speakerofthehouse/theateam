@@ -42,16 +42,13 @@ Notes:
 Postcondition:
   User has authenticated access to Spotify account
   
-  
-  
-  
-  
+ ++++++++++++++++++++
   
 Playlist update test:
   
 Description:
   Verify that the app can pull playlist and track data from spotify
-  
+
 Precondition:
   User is authenticated with spotify account
   
@@ -68,7 +65,7 @@ Actual Result:
   Does not display tracks for premade playlists
   
 Status:
-  effective pass
+  effective pass 
   
 Notes:
   Look into premade playlists access.
@@ -76,10 +73,7 @@ Notes:
 Postcondition:
   User has selected a playlist for shuffling
   
-  
-  
-  
-  
+  ++++++++++++++++++++
   
 Shuffle function test:
   
