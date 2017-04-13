@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+
+<html>
+<head>
+
+<!-- background changes background color
+     color changes text color
+     padding gives padding around text in that sepcific section
+
+-->
+<style>
+	#wrap{
+		width:100%;
+	}
+
+	.left{
+		width:75%;
+		height:450px;
+		background-color:#611c8e;
+		color: white;
+		float:left;
+	}
+
+	.right{
+		width:25%;
+		height:450px;
+		background-color:#9898a0;
+		color: white;
+		float:right;
+	}
+	.header{
+		width: 100%;
+		background-color:#283747;
+		color:white;
+	}
+	.songtable{
+		height:100%;
+		overflow-y:scroll;
+		display:block;
+	}
+	.playbar{
+		height:3.7%;
+		width:100%;
+		background: black;
+	}
+	.dropbtn{
+		background-color: #ede91c;
+		color: black;
+		padding: 5px;
+		font-size: 15px;
+		border: none;
+		cursor: pointer;
+	}
+	<!-- not sure what this stuff is for:
+	.dropbtwn:however, .dropbtn:focus{
+		background-color: #ede91c
+	}
+	-->
+	.dropdown{
+		position: relative;
+		display: inline-block;
+	}
+	<!-- need some java script for this to work:
+		https://www.w3schools.com/howto/howto_js_dropdown.asp
+	.dropdown-content{
+		display: none;
+		position: absolute;
+		background-color: #f9f9f9;
+		min-width: 160px;
+		z-index: 1;
+	}-->
+	
+	
+
+</style>
+
+<title> SHUFFLE+ </title>
+</head>
+
+
+<div class="header">
+<center><h1>PLAYLISTNAME</h1></center>
+	<!-- ADD GENERAL PLAYLIST IMAGE HERE -- set of few album covers or general image?-->	
+	<center> <img src="background.jpeg" height="100"/> </center>
+	<!-- -------------------------------------------------------------------------- -->
+	<center>
+		otherplaylistinfo -- #hours,#songs??
+		<br /> HOURS: _		SONGS: _
+	</center>
+</div>
+
+
+
+<body>
+<div id="wrap">
+	<div class="left">
+		<center><h2>CURRENT SONG:</h2></center>
+		<center> _audio file_ </center>
+		<br />
+		<center> <img src="background.jpeg"/> </center>
+		<center> ARTIST: __</center>
+		<center> ALBUM: __</center>
+		<center> TIME: _:__</center>
+
+		<br />
+		<br />
+		
+		
+		<center>
+		<div class="dropdown">
+			<button class="dropbtn">Dropdown Bar(shuffle type select)</button>
+			<div class="dropdown-content">
+				
+			</div>
+		</div>
+		
+		<div class="playbar">
+			<!-- http://devblog.lastrose.com/html5-audio-video-playlist/-->
+			<!-- http://jsfiddle.net/lastrose/vSLWK/???-->
+			<audio controls>
+				<source src="thatsright.mp3" type="audio/mp3">
+			</audio>
+		</center>			
+			
+			<script>
+				var audio = "thatsright.mp3"
+			</script>	
+				
+		</div>
+
+		
+
+	</div>
+	<div class="right">
+		<div class="songtable">	
+			<center> <table border="1"> </center>
+				<tr>
+					<th colspan="4"> SongList </th>
+				</tr>
+	
+				<tr>
+					<th>SONG</th> 
+					<th>ARTIST</th> 
+					<th>ALBUM</th>
+					<th>TIME</th>
+				</tr>
+
+				<tr>
+					<td>x1</td>
+					<td>y1</td>
+					<td>z1</td>
+					<td>xyz1</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+				
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+				<tr>
+					<td>x2</td>
+					<td>y2</td>
+					<td>z2</td>
+					<td>xyz2</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+</body>
+</html>
