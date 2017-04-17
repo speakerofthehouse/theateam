@@ -3,24 +3,50 @@
 <link type="text/css" rel="stylesheet" href="basicstyle.css" />
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
+      var beginning = "";
+      if ("<%= env %>" === "Local") {
+        beginning = "http://localhost:5000";
+      } else {
+        beginning = "shuffleplus.herokuapp.com";
+      }
       var renderTracklist = function(caller){
         //Get tracklist id from html button element
         var playlist_id = caller.getAttribute("id");
         //Call the get-tracks endpoint with the given playlist's id
         $.ajax({
-          url: "http://localhost:5000/get-tracks/<%= user_id %>/" + playlist_id + "/<%= access_token %>",
-          context: document.body,
-          success: function(res){
-            //Append the returned html to the tracklist div
-            $("#tl-div").html(res);
+          url: beginning + "/get-tracks/<%= user_id %>/" + playlist_id + "/<%= access_token %>",
+          context: document.body
+        }).done(function(data){
+          //Append the returned html to the tracklist div
+          $("#tl-div").html(data);
 
-            //Make a Spotify play button widget and prepend it to the tracklist div
-            var src = "https://embed.spotify.com/?uri=spotify:user:" + <%= user_id %> + ":playlist:" + playlist_id + "&theme=white&view=coverart"
-            var player = document.createElement("iframe");
-            player.setAttribute("src", src);
-            player.setAttribute("frameborder", "0");
-            player.setAttribute("allowtransparency", "true");
-            $("#tl-div").prepend(player);
+          //Make a Spotify play button widget and prepend it to the tracklist div
+          var src = "https://embed.spotify.com/?uri=spotify:user:" + <%= user_id %> + ":playlist:" + playlist_id + "&theme=white&view=coverart"
+          var player = document.createElement("iframe");
+          player.setAttribute("src", src);
+          player.setAttribute("frameborder", "0");
+          player.setAttribute("allowtransparency", "true");
+          $("#tl-div").prepend(player);
+          var shuffleBtn = document.createElement("button");
+          shuffleBtn.innerHTML = "Shuffle";
+          shuffleBtn.setAttribute("id", playlist_id);
+          shuffleBtn.setAttribute("onClick", "shufflePlaylist(this)");
+          $("#tl-div").prepend(shuffleBtn);
+        });
+      };
+
+      var shufflePlaylist = function(caller){
+        $("#tl-div").html("<p>Shuffling...</p>");
+        var playlist_id = caller.getAttribute("id");
+        $.ajax({
+          url: beginning + "/shuffle/<%= user_id %>/" + playlist_id +  "/<%= access_token %>",
+        }).done(function(data){
+          if (data === "Shuffle Success"){
+            console.log("Shuffle Success");
+            document.getElementsByName(playlist_id)[0].click();
+          }
+          else {
+            console.log("Shuffle Error");
           }
         });
       };

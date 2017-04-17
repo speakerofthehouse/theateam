@@ -18,7 +18,17 @@ app.use(express.static(__dirname + '/public')).use(cookieParser());;
 
 var client_id = 'd739d37b250a4deb902355e3e4bbb32d';
 var client_secret = '9d16385d5beb4eb9a5a65b5b27391b8a';
-var redirect_uri = 'http://localhost:5000/callback';
+var redirect_uri = '';
+var env = '';
+
+if (app.get('port') !== 5000) {
+  redirect_uri = 'http://shuffleplus.herokuapp.com/callback';
+  env = 'Remote';
+} else {
+  redirect_uri = 'http://localhost:5000/callback';
+  env = 'Local';
+}
+
 var stateKey = 'spotify_auth_state';
 
 //Used for creating state strings
@@ -103,7 +113,8 @@ app.get('/callback', function(req, res) {
               playlists: body.items,
               user_id: user_id,
               access_token: access_token,
-              refresh_token: refresh_token
+              refresh_token: refresh_token,
+              env: env
             });
           });
         });
@@ -152,7 +163,6 @@ app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
 
    //GET tracks
    request.get(options, function(error, response, body) {
-     console.log(body);
      res.render('partials/tracklist', {
        songs: body.items
      });
@@ -177,11 +187,47 @@ app.get('/shuffle/:user_id/:playlist_id/:access_token', function(req, res){
      var entries = body.items;  //Array of playlist entry objects
      var length = body.total;   //Length of playlist
      var tracks = [];           //Array of track objects in playlist
-     for (i = 0; i < length; i++){
-       //Ex-track-t track elements from playlist entries
-       tracks[i] = entries[i].track;
-     }
      /***Shuffle function(s) to go here***/
+     var reorderOptions = {
+       url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
+       headers: {
+         'Authorization': 'Bearer ' + access_token,
+         'Content-Type' : 'application/json'
+       },
+       form: ""
+     }
+
+    var index;
+    var done = false;
+    for (var i = length; i > 0; i--) {
+      index = Math.floor(Math.random() * i);
+      reorderOptions.form = "{ \"range_start\" : " + index + ", \"insert_before\" : " + i + " }"
+      request.put(reorderOptions, function(error, response, body){
+           console.log((length - i) + 1);
+           if (!error && response.statusCode === 200) {
+             if (i === 1){
+               console.log("Shuffle Complete");
+               res.send("Shuffle Success");
+             } else {
+               console.log("Shuffle Success");
+               done = true;
+             }
+           }
+           else{
+             if (i === 1){
+               console.log("Shuffle Complete");
+               res.send("Shuffle Success");
+             } else {
+               console.log(body);
+               done = true;
+             }
+           }
+      });
+      while(!done){
+        deasync.sleep(10);
+      }
+      done = false;
+    }
    });
 });
 

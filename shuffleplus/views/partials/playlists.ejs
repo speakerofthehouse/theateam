@@ -2,7 +2,7 @@
 <ul id="playlists">
   <% playlists.forEach(function(playlist){ %>
     <li>
-      <button id="<%= playlist.id %>" onclick="renderTracklist(this)">
+      <button id="<%= playlist.id %>" name="<%= playlist.id %>" onclick="renderTracklist(this)">
         <%= playlist.name %>
       </button>
     </li>
