@@ -5,17 +5,12 @@ const request = require("request");
 const supertest = require("supertest");
 const index = require("../index");
 
-<<<<<<< HEAD
 //Create a local test server to test api endpoints
 var server = supertest.agent("http://localhost:8000");
 
 //Tests all functions involved in authenticating a user
 describe("Authenticate User", function(){
-=======
-var server = supertest.agent("http://localhost:5000")
 
-describe("Gets API Login Code", function(){
->>>>>>> startshuffle
   describe("Random String Generator", function(){
     it("Generates random strings of correct length", function(){
       var random1 = index.generateRandomString(10);
@@ -34,7 +29,6 @@ describe("Gets API Login Code", function(){
     })
   });
 
-<<<<<<< HEAD
   describe("Fetch Login Page", function(){
     it("Returns the login page", function(){
       server
@@ -59,15 +53,4 @@ describe("Gets API Login Code", function(){
         });
       });
     });
-
-=======
-  describe("Set Cookies", function(){
-    var random = index.generateRandomString(16);
-    var cookie = "Empty string";
-
-    app.get("/", function(req, res){
-
-    })
-  });
->>>>>>> startshuffle
 });

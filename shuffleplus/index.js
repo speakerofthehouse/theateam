@@ -3,6 +3,8 @@ const request = require('request');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
 const deasync = require('deasync');
+const shuffles = require('./shuffles');
+const now = require('performance-now');
 const app = express();
 
 //Get views from views folder and render pages as embedded js
@@ -170,9 +172,10 @@ app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
 });
 
 //Shuffle the tracks in a playlist according to the specified option
-app.get('/shuffle/:user_id/:playlist_id/:access_token', function(req, res){
+app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(req, res){
   var playlist_id = req.params.playlist_id;
   var access_token = req.params.access_token;
+  var shuffle_style = req.params.shuffleStyle;
   var user_id = req.params.user_id;
   var option = req.params.option;
 
@@ -187,6 +190,9 @@ app.get('/shuffle/:user_id/:playlist_id/:access_token', function(req, res){
      var entries = body.items;  //Array of playlist entry objects
      var length = body.total;   //Length of playlist
      var tracks = [];           //Array of track objects in playlist
+     for (i = 0; i < length; i++){
+       tracks.push(entries[i].track);
+     }
      /***Shuffle function(s) to go here***/
      var reorderOptions = {
        url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
@@ -197,36 +203,70 @@ app.get('/shuffle/:user_id/:playlist_id/:access_token', function(req, res){
        form: ""
      }
 
-    var index;
     var done = false;
-    for (var i = length; i > 0; i--) {
-      index = Math.floor(Math.random() * i);
-      reorderOptions.form = "{ \"range_start\" : " + index + ", \"insert_before\" : " + i + " }"
-      request.put(reorderOptions, function(error, response, body){
-           console.log((length - i) + 1);
-           if (!error && response.statusCode === 200) {
-             if (i === 1){
-               console.log("Shuffle Complete");
-               res.send("Shuffle Success");
-             } else {
-               console.log("Shuffle Success");
-               done = true;
+    var newIndices;
+    var startTime;
+    var endTime;
+    var runTime;
+    startTime = now();
+
+    if (shuffle_style === "random"){
+      newIndices = shuffles.randShuffle(tracks);
+    }
+    else if (shuffle_style === "spread"){
+      newIndices = shuffles.spreadShuffle(tracks);
+      console.log(newIndices);
+    }
+    for (var i = 0; i < newIndices.length; i++) {
+      if (newIndices[i].currentIndex !== newIndices[i].newIndices){
+        reorderOptions.form = "{ \"range_start\" : " + newIndices[i].currentIndex + ", \"insert_before\" : " + newIndices[i].newIndex + " }";
+        console.log(reorderOptions.form);
+        request.put(reorderOptions, function(error, response, body){
+             if (!error && response.statusCode === 200) {
+               if (i === (newIndices.length - 1)){
+                 console.log("Shuffle Complete");
+                 endTime = now();
+                 runTime = endTime - startTime;
+                 console.log("Total Shuffle Time: " + runTime.toFixed(3).toString());
+                 res.send("Shuffle Success");
+               } else {
+                 console.log("Reorder Success");
+                 if (newIndices[i].newIndex < newIndices[i].currentIndex){
+                   for (j = 0; j < newIndices.length; j++){
+                     //If the current index of the track is between the old and new indices of the reordered track
+                     if (newIndices[j].currentIndex >= newIndices[i].newIndex && newIndices[j].currentIndex < newIndices[i].currentIndex){
+                       newIndices[j].currentIndex++;
+                     }
+                   }
+                 } else {
+                   for (j = 0; j < newIndices.length; j++){
+                     if (newIndices[j].currentIndex > newIndices[i].currentIndex && newIndices[j].currentIndex < newIndices[i].newIndex){
+                       newIndices[j].currentIndex--;
+                     }
+                   }
+                 }
+                 newIndices[i].currentIndex == newIndices[i].newIndex;
+                 done = true;
+               }
              }
-           }
-           else{
-             if (i === 1){
-               console.log("Shuffle Complete");
-               res.send("Shuffle Success");
-             } else {
-               console.log(body);
-               done = true;
+             else{
+               if (i === (newIndices.length - 1)){
+                 console.log("Shuffle Complete");
+                 endTime = now();
+                 runTime = endTime - startTime;
+                 console.log("Total Shuffle Time: " + string(runTime.toFixed(3)));
+                 res.send("Shuffle Success");
+               } else {
+                 console.log(body);
+                 done = true;
+               }
              }
-           }
-      });
-      while(!done){
-        deasync.sleep(10);
+        });
+        while(!done){
+          deasync.sleep(10);
+        }
+        done = false;
       }
-      done = false;
     }
    });
 });

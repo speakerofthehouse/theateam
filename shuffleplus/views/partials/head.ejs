@@ -27,19 +27,27 @@
           player.setAttribute("frameborder", "0");
           player.setAttribute("allowtransparency", "true");
           $("#tl-div").prepend(player);
-          var shuffleBtn = document.createElement("button");
-          shuffleBtn.innerHTML = "Shuffle";
-          shuffleBtn.setAttribute("id", playlist_id);
-          shuffleBtn.setAttribute("onClick", "shufflePlaylist(this)");
-          $("#tl-div").prepend(shuffleBtn);
+          var randomShuffleBtn = document.createElement("button");
+          randomShuffleBtn.innerHTML = "Random Shuffle";
+          randomShuffleBtn.setAttribute("id", playlist_id);
+          randomShuffleBtn.setAttribute("name", "random");
+          randomShuffleBtn.setAttribute("onClick", "shufflePlaylist(this)");
+          $("#tl-div").prepend(randomShuffleBtn);
+          var spreadShuffleBtn = document.createElement("button");
+          spreadShuffleBtn.innerHTML = "Spread Shuffle";
+          spreadShuffleBtn.setAttribute("id", playlist_id);
+          spreadShuffleBtn.setAttribute("name", "spread");
+          spreadShuffleBtn.setAttribute("onClick", "shufflePlaylist(this)");
+          $("#tl-div").prepend(spreadShuffleBtn);
         });
       };
 
       var shufflePlaylist = function(caller){
         $("#tl-div").html("<p>Shuffling...</p>");
         var playlist_id = caller.getAttribute("id");
+        var shuffleType = caller.getAttribute("name");
         $.ajax({
-          url: beginning + "/shuffle/<%= user_id %>/" + playlist_id +  "/<%= access_token %>",
+          url: beginning + "/shuffle/" + shuffleType + "/<%= user_id %>/" + playlist_id +  "/<%= access_token %>",
         }).done(function(data){
           if (data === "Shuffle Success"){
             console.log("Shuffle Success");
