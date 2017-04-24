@@ -54,3 +54,33 @@ describe("Authenticate User", function(){
       });
     });
 });
+
+//Tests the shuffle function
+describe("Playlist Update", function(){
+	
+	
+	
+	describe("Playlist Options", function(){
+	  it("Open Playlist", function(){
+		request.get("http://localhost:8000/get-tracks/:user_id/:playlist_id/:access_token", function(res){
+		  expect(res.playlist_id).to.not.equal(undefined);
+		});
+	  });
+	});	
+
+	describe("Playlist Options", function(){
+	  it("Open Playlist", function(){
+	    request.get("http://localhost:8000/get-tracks/:user_id/:playlist_id/:access_token", function(res){
+		  expect(res.get.res.render.songs).to.not.equal(undefined);
+	    });
+	  });
+	});
+	
+	describe("Track Preview", function(){
+	  it("Open Track Preview", function(){
+	    request.get("http://localhost:8000/callback", function(res){
+		  expect(res.get.get.render).to.not.equal(undefined);
+	    });
+	  });
+	});
+});
