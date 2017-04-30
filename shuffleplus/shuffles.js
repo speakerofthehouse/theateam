@@ -5,7 +5,6 @@ var exports = module.exports;
 var shuffleArray = function(array){
   for (var i = array.length - 1; i > 0; i--) {
     var index = Math.floor(Math.random() * i);
-    //swap
     var tmp = array[index];
     array[index] = array[i];
     array[i] = tmp;
@@ -99,4 +98,24 @@ exports.spreadShuffle = function(songArray){
     fin_array[i].newIndex = i;
   }
   return fin_array;
+}
+
+exports.biasedShuffle = function(songArray){
+  var arrays = [[], [], [], [], []];
+
+  //Sort the tracks by rank
+  for (i = 0; i < songArray.length; i++){
+    for (j = 0; j < 5; j++){
+      if (songArray[i].rank == (5 - j)){
+        arrays[j].push(songArray[i]);
+      }
+    }
+  }
+
+  for (i = 0; i < 5; i++){
+    shuffleArray(arrays[i]);
+  }
+
+  //Return the merged subarrays
+  return [].concat.apply([], arrays);
 }
