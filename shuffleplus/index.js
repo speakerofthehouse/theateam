@@ -215,10 +215,9 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
     }
     else if (shuffle_style === "spread"){
       newIndices = shuffles.spreadShuffle(tracks);
-      console.log(newIndices);
     }
     for (var i = 0; i < newIndices.length; i++) {
-      if (newIndices[i].currentIndex !== newIndices[i].newIndices){
+      if (newIndices[i].currentIndex !== newIndices[i].newIndex){
         reorderOptions.form = "{ \"range_start\" : " + newIndices[i].currentIndex + ", \"insert_before\" : " + newIndices[i].newIndex + " }";
         console.log(reorderOptions.form);
         request.put(reorderOptions, function(error, response, body){
@@ -270,6 +269,7 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
     }
    });
 });
+
 
 //Listen for requests
 app.listen(app.get('port'), function() {
