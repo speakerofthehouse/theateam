@@ -215,6 +215,7 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
     }
     else if (shuffle_style === "spread"){
       newIndices = shuffles.spreadShuffle(tracks);
+      console.log(newIndices);
     }
     for (var i = 0; i < newIndices.length; i++) {
       if (newIndices[i].currentIndex !== newIndices[i].newIndex){
@@ -269,7 +270,6 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
     }
    });
 });
-
 
 //Listen for requests
 app.listen(app.get('port'), function() {

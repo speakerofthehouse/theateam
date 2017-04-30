@@ -49,7 +49,7 @@ exports.randShuffle = function(songArray){
   var done = false;
   for (i = 0; i < songArray.length; i++){
     var indices = {
-      originalIndex: i,
+      currentIndex: i,
       newIndex: null
     };
     trackIndices.push(indices);
