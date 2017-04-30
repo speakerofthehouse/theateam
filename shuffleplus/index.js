@@ -227,10 +227,8 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
                  endTime = now();
                  runTime = endTime - startTime;
                  console.log("Total Shuffle Time: " + runTime.toFixed(3).toString());
-                 done = true;
                  res.send("Shuffle Success");
-               }
-               else {
+               } else {
                  console.log("Reorder Success");
                  if (newIndices[i].newIndex < newIndices[i].currentIndex){
                    for (j = 0; j < newIndices.length; j++){
@@ -239,8 +237,7 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
                        newIndices[j].currentIndex++;
                      }
                    }
-                 }
-                 else {
+                 } else {
                    for (j = 0; j < newIndices.length; j++){
                      if (newIndices[j].currentIndex > newIndices[i].currentIndex && newIndices[j].currentIndex < newIndices[i].newIndex){
                        newIndices[j].currentIndex--;
