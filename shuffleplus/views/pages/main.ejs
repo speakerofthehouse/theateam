@@ -5,7 +5,10 @@
 </head>
 <body>
   <h1>Welcome, <%= name %>!</h1>
-  <div id="pl-div"><% include ../partials/playlists %></div>
+  <div id="main-div">
+  <div id="pl-div"><% include ../partials/playlists.ejs %></div>
   <div id="tl-div"></div>
+  <div id ="shuffle-div"><% include ../partials/shuffle.ejs %></div>
+  </div>
 </body>
 </html>

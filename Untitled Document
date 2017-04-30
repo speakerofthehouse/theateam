@@ -1,0 +1,92 @@
+Who: 
+Eric Speaker -- speakerofthehouse;
+Brian Chung -- chungb2015;
+Patrick Amato -- pro-respirator;
+David White -- dwight9339
+
+Title: Shuffle+
+
+Vision Statement:
+  Your music however you want it.
+  
+++++++++++++++++++++++++
+Automated Testing
+++++++++++++++++++++++++
+
+
+
+
+++++++++++++++++++++++++
+User Acceptance Testing
+++++++++++++++++++++++++
+Use case name
+    Verify authentication
+Description
+    test the authentication and spotify account linkage
+Precondition
+    User has spotify account
+Test steps
+    1. Navigate to shuffle+ landing page
+    2. Click log in
+    3. Follow prompts to log in with either facebook or directly with spotify credentials
+Expected result
+    User should be redirected to the main page, with the heading "Welcome, <name>"
+Actual result
+    User is redirected to main page, with heading
+Status
+    pass
+Post-Conditions
+    User is validated with spotify, allowing the app access to playlists through the spotify api
+    
+    
+
+Use case name
+    Verify playlist functions   
+Description
+    test the playlist and track display features
+Precondition
+    user is logged into spotify and authenticated as per the "verify authentication" test
+Test steps
+    1. Navigate to shuffle+ home page
+    2. verify that the playlist buttons appear on the left side of the application
+    3. verify that the track list for the current playlist appears in the center
+    4. select new playlist, verify that the playlist icon and track list change accordingly
+Expected result
+    User should see the updated track list and playlist icon for each playlist
+Actual result
+    User sees updated track list and playlist icon for each playlist
+Status
+    pass
+Post-Conditions
+    User is able to select a playlist to apply the shuffle functionality to.
+    
+    
+    
+Use case name
+    verify shuffle functionality
+Description
+    test that the shuffle button actually randomizes the playlist order within spotify
+Precondition
+    user is logged into spotify and authenticated as per the "verify authentication" test
+Test steps
+    1. Navigate to shuffle+ home page
+    2. select a playlist from the list of choices
+    3. click the player to open in spotify
+    4. return to shuffle+ home page, click the shuffle button
+    5. click the player to reopen the playlist in spotify
+Expected result
+    Song order within selected playlist should have changed
+Actual result
+    Song order remains the same
+Status
+    fail
+Post-Conditions
+    playlist order has been uniformly randomized
+    
+    
+
+    
+    
+    
+
+    
