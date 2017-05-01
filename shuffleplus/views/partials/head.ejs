@@ -5,6 +5,9 @@
 <script>
       var currentPlaylist;
       var shuffleType;
+      var biasCategory = "artist";
+      var categories = [];
+      var tracks = [];
 
       var beginning = "";
       if ("<%= env %>" === "Local") {
@@ -21,8 +24,10 @@
           context: document.body
         }).done(function(data){
           //Append the returned html to the tracklist div
-          $("#tl-div").html(data);
-
+          //$("#tl-div").html(data);
+          console.log(tracks);
+          getCategories();
+          listCategories();
           //Make a Spotify play button widget and prepend it to the tracklist div
           var src = "https://embed.spotify.com/?uri=spotify:user:" + <%= user_id %> + ":playlist:" + currentPlaylist + "&theme=white&view=coverart"
           var player = document.createElement("iframe");
@@ -59,5 +64,20 @@
         });
       };
 
-      //var getCategories = function()
+      var getCategories = function(){
+        $.ajax({
+          url: beginning + "/get-categories/<%= user_id %>/" + currentPlaylist + "/" + biasCategory +  "/<%= access_token %>",
+          context: document.body
+        }).done(function(data){
+          categories = data;
+        });
+      }
+
+      var listCategories = function(){
+        for (i = 0; i < categories.length; i++){
+          $("#category-div").prepend(
+            "<p>" + categories[i] + "</p>"
+          );
+        }
+      }
 </script>
