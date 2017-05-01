@@ -4,10 +4,11 @@
   <% include ../partials/head %>
 </head>
 <body>
-  <h1>Welcome, <%= name %>!</h1>
-  
+  <h1 id="head-div">Welcome, <%= name %>!</h1>
+  <div id="main-div">
   <div id="pl-div"><% include ../partials/playlists %></div>
   <div id="tl-div"></div>
   <div id="shuffleoption-div"><% include ../partials/shuffleoptions %></div>
+</div>
 </body>
 </html>

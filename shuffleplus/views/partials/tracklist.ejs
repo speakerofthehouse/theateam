@@ -1,7 +1,9 @@
 <iframe frameborder="0" allowtransparency="true" src="https://embed.spotify.com/?uri=spotify:user:<%= user_id %>:playlist:<%= playlist_id %>&theme=white&view=coverart"></iframe>
 <h2>Tracks</h2>
+<div id="scroll-div">
 <ul>
 <% songs.forEach(function(song){ %>
   <li><%= song.track.name %> - <%= song.track.artists[0].name %></li>
 <% }); %>
 </ul>
+</div>
