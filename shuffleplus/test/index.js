@@ -54,3 +54,66 @@ describe("Authenticate User", function(){
       });
     });
 });
+
+//Tests the Playlist Update function
+describe("Playlist Update", function(){
+	
+	
+
+	describe("Playlist Options", function(){
+	  it("Open Playlist", function(){
+		request.get("http://localhost:8000/get-tracks/:user_id/:playlist_id/:access_token", function(res){
+		  expect(res.playlist_id).to.not.equal(undefined);
+		});
+	  });
+	});	
+
+	describe("Playlist Options", function(){
+	  it("Open Playlist Options", function(){
+	    request.get("http://localhost:8000/get-tracks/:user_id/:playlist_id/:access_token", function(res){
+		  expect(res.get.res.render.songs).to.not.equal(undefined);
+	    });
+	  });
+	});
+	
+	describe("Track Preview", function(){
+	  it("Open Track Preview", function(){
+	    request.get("http://localhost:8000/callback", function(res){
+		  expect(res.get.get.render).to.not.equal(undefined);
+	    });
+	  });
+	});
+});
+
+
+//Tests the Shuffle functions
+describe("Shuffle Function", function(){
+	
+	
+
+	describe("Random Shuffle", function(){
+	  it("Random Shuffle", function(){
+		var Testarray = ["Hi","hello","Hola","Pie","Cake","Pancake","Waffle","Phone","Waffle","Waffle"];
+		var random = shuffles.randShuffle(Testarray);
+		
+		expect(Testarray.length).to.equal(10);
+	  });
+	});	
+/*
+	describe("Spread Shuffle", function(){
+	  it("Test Spread Shuffle", function(){    
+	    var testarray = [{artists: [{name: "Cake"}]}, {artists: [{name: "Cake"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pancake"}]}, {artists: [{name: "Pancake"}]}, {artists: [{name: "Pancake"}]}],{artists: [{name: "Waffle"}]};
+	    var spread = shuffles.spreadShuffle(testarray);
+	    
+	    expect(testarray.length).to.equal(10);
+	  });
+	});
+	
+	describe("Bias Shuffle", function(){
+	  it("Test Bias Shuffle", function(){
+	    request.get("http://localhost:8000/callback", function(res){
+		  expect(res.get.get.render).to.not.equal(undefined);
+	    });
+	  });
+	});*/
+});
