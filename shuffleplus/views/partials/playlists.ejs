@@ -1,8 +1,8 @@
 <h2>Your Playlists:</h2>
-<ul id="playlists">
+<ul id="playlists" >
   <% playlists.forEach(function(playlist){ %>
     <li>
-      <button id="<%= playlist.id %>" name="<%= playlist.id %>" onclick="renderTracklist(this)">
+      <button class="playlist" id="<%= playlist.id %>" name="<%= playlist.id %>" onclick="renderTracklist(this)">
         <%= playlist.name %>
       </button>
     </li>

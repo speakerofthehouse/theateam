@@ -5,9 +5,7 @@
 <script>
       var currentPlaylist;
       var shuffleType;
-      var biasCategory = "artist";
-      var categories = [];
-      var tracks = [];
+      var shuffleParam = "artist";
 
       var beginning = "";
       if ("<%= env %>" === "Local") {
@@ -27,13 +25,7 @@
           $("#tl-div").html(data);
           console.log(tracks);
           getCategories();
-          listCategories();
           //Make a Spotify play button widget and prepend it to the tracklist div
-          var src = "https://embed.spotify.com/?uri=spotify:user:" + <%= user_id %> + ":playlist:" + currentPlaylist + "&theme=white&view=coverart"
-          var player = document.createElement("iframe");
-          player.setAttribute("src", src);
-          player.setAttribute("frameborder", "0");
-          player.setAttribute("allowtransparency", "true");
           $("#tl-div").prepend(player);
           var randomShuffleBtn = document.createElement("button");
           randomShuffleBtn.innerHTML = "Random Shuffle";
@@ -66,7 +58,7 @@
 
       var getCategories = function(){
         $.ajax({
-          url: beginning + "/get-categories/<%= user_id %>/" + currentPlaylist + "/" + biasCategory +  "/<%= access_token %>",
+          url: beginning + "/get-categories/<%= user_id %>/" + currentPlaylist + "/" + shuffleParam +  "/<%= access_token %>",
           context: document.body
         }).done(function(data){
           categories = data;

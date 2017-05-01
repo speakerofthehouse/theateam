@@ -173,7 +173,9 @@ app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
    //GET tracks
    request.get(options, function(error, response, body) {
      res.render('partials/tracklist', {
-       songs: body.items
+       songs: body.items,
+       user_id: user_id,
+       playlist_id: playlist_id
      });
    });
 });
