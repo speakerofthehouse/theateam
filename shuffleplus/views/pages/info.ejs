@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Info</title>
+  <link type="text/css" rel="stylesheet" href="basicstyle.css" />
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    $(document).ready(function(){
+      $(".accordion").accordion({ collapsible: true, active: false, autoHeight: false });
+    });
+  </script>
+</head>
+<body>
+  <div class="accordion">
+    <h2 class="sectionHeader">Q&A</h2>
+    <div class="accordion">
+      <h3>Why use shuffle+?</h3>
+      <div>
+        <p>
+          Shuffle+ is a Spotify utility app that provides you, the user, with more control
+          over how your playlist gets shuffled. Spotify allows users to shuffle their music via
+          their various apps but they only offer one shuffling algorithm (which served inspiration for our
+          "Spread Shuffle" algorithm.) Also, Spotify users are only able to shuffle according to song title.
+          Shuffle+ offers users a more versatile tool for shuffling their playlists using a few different algorithms
+          that shuffle using a variety of user specified criteria. In essence, Shuffle+ gives you more control of
+          your shuffle.
+        </p>
+      </div>
+      <h3>What's wrong with Spotify's shuffle?</h3>
+      <div>
+        <p>
+          Absolutely nothing! The shuffle offered with Spotify's various apps is an elegant, sophisticated, although not truly
+          random algorithm designed to provide the user with the most diversifed permutation possible with the songs
+          provided. However, <em>there's only one!</em> Shuffle+ isn't here to replace Spotify's shuffle, we're merely here to
+          provide users who want more options in how their playlist gets shuffled.
+        </p>
+      </div>
+    </div>
+    <h2 class="sectionHeader">Shuffles</h2>
+    <div class="accordion">
+      <h3>Random<h3>
+        <div>
+          <p>
+            This shuffle algorithm is the most basic of the three. Based on the <a href="https://bost.ocks.org/mike/shuffle/">Fisher-Yates</a> shuffle algorithm, this simply produces a uniformly
+            random permutation of the songs in your playlist. Be aware that this algorithm has as much chance of producing
+            a permutation with songs by the same artist, from the same album, etc. all grouped together as it does of
+            producing one where they are spread apart.
+          </p>
+        </div>
+        <h3>Spread</h3>
+        <div>
+          <p>
+            This algorithm is similar to the one provided on Spotify except that it allows you to choose what criterion to shuffle
+            by (track artist, album, length, and more.) The songs are then spread out so that groups of song with different
+            criterias are placed together in blocks where they are separated from other tracks with the same shuffle criteria.
+            The "Block shuffle" option shuffles these blocks for more randomness. However, notice that this also runs the risk
+            of placing songs with similar shuffle criteria closer together. This is nice when you want an arrangement that's random but ensures that don't hear songs by the same artist, from the same album, etc. back to back too often.
+          </p>
+        </div>
+        <h3>Biased</h3>
+        <div>
+          <p>
+            Finally, we have our most versatile shuffling tool; our "biased" shuffle. The biased shuffle function allows you, the
+            user, to rank tracks by title, artist, album, and more. Our algorithm then groups songs according to their rank, shuffles these groups, and produces a randomized playlist but with higher ranked tracks placed closer to the front. This function is very handy when you want a random arrangement but you want certain tracks to have priority.
+          </p>
+        </div>
+    </div>
+  </div>
+</body>
+</html>

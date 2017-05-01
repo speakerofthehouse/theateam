@@ -1,0 +1,33 @@
+<h2>Shuffle Type:</h2>
+<form action="">
+  <label for="shuffleType-random">Random</label>
+  <input type="radio" name="shuffleType" id="shuffleType-random" value="random" />
+  <label for="shuffleType-spread">Spread</label>
+  <input type="radio" name="shuffleType" id="shuffleType-spread" value="spread" />
+  <div id="spreadoptions">
+    <h2>Spread Options:</h2>
+    <h3>Spread By:</h3>
+    <label for="spreadParam-artist">Artist</label>
+    <input type="radio" name="spreadParam" id="spreadParam-artist" value="Artist" />
+    <label for="spreadParam-album">Artist</label>
+    <input type="radio" name="spreadParam" id="spreadParam-album" value="Album" />
+    <label for="spreadParam-explicit">Explicit</label>
+    <input type="radio" name="spreadParam" id="spreadParam-explicit" value="Explicit" />
+    <label for="spreadParam-popularity">Popularity</label>
+    <input type="radio" name="spreadParam" id="spreadParam-popularity" value="Popularity" />
+    <label for="internalshuffle">Internal Shuffle</label>
+    <input type="checkbox" id="internalshuffle" value="Internal Shuffle" />
+  </div>
+  <label for="shuffleType-biased">Biased</label>
+  <input type="radio" name="shuffleType" id="shuffleType-biased" value="biased" />
+  <div id="biasoptions">
+    <label for="bias-category-title">Title</label>
+    <input type="radio" name="bias-category" id="bias-category-title" value="title" />
+    <label for="bias-category-title">Artist</label>
+    <input type="radio" name="bias-category" id="bias-category-artist" value="artist" />
+    <label for="bias-category-title">Album</label>
+    <input type="radio" name="bias-category" id="bias-category-album" value="album" />
+    <label for="bias-category-title">Explicit</label>
+    <input type="radio" name="bias-category" id="bias-category-explicit" value="explicit" />
+  </div>
+</form>
