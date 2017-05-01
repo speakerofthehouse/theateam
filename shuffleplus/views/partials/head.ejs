@@ -24,19 +24,7 @@
           //Append the returned html to the tracklist div
           $("#tl-div").html(data);
           console.log(tracks);
-          getCategories();
           //Make a Spotify play button widget and prepend it to the tracklist div
-          $("#tl-div").prepend(player);
-          var randomShuffleBtn = document.createElement("button");
-          randomShuffleBtn.innerHTML = "Random Shuffle";
-          randomShuffleBtn.setAttribute("name", "random");
-          randomShuffleBtn.setAttribute("onClick", "shufflePlaylist(this)");
-          $("#tl-div").prepend(randomShuffleBtn);
-          var spreadShuffleBtn = document.createElement("button");
-          spreadShuffleBtn.innerHTML = "Spread Shuffle";
-          spreadShuffleBtn.setAttribute("name", "spread");
-          spreadShuffleBtn.setAttribute("onClick", "shufflePlaylist(this)");
-          $("#tl-div").prepend(spreadShuffleBtn);
         });
       };
 
@@ -45,6 +33,7 @@
         shuffleType = caller.getAttribute("name");
         $.ajax({
           url: beginning + "/shuffle/" + shuffleType + "/<%= user_id %>/" + currentPlaylist +  "/<%= access_token %>",
+          context: document.body
         }).done(function(data){
           if (data === "Shuffle Success"){
             console.log("Shuffle Success");
@@ -54,15 +43,30 @@
             console.log("Shuffle Error");
           }
         });
-      };
+      }
 
       var getCategories = function(){
+        console.log("Getting categories");
         $.ajax({
           url: beginning + "/get-categories/<%= user_id %>/" + currentPlaylist + "/" + shuffleParam +  "/<%= access_token %>",
           context: document.body
         }).done(function(data){
-          categories = data;
+          $("#category-div").html(data);
         });
       }
 
+      $("#shuffleType-random").focus(function(){
+        shuffleType = "random";
+        console.log("Switched to random");
+      });
+
+      $("#shuffleType-spread").focus(function(){
+        shuffleType = "spread";
+        console.log("Switched to spread");
+      });
+
+      $("#shuffleType-biased").focus(function(){
+        shuffleType = "biased";
+        console.log("Switched to biased");
+      });
 </script>

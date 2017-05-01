@@ -225,12 +225,29 @@ app.get('/get-categories/:user_id/:playlist_id/:bias_category/:access_token', fu
    });
 });
 
+/** Creates an array of objects containing the specified param for each song **/
+var extractShuffleParams = function(songs, param){
+  var songArray = []''
+  if (param === "artist"){
+    for (i = 0; i < songArray.length; i++){
+      var indices = {
+        shuffleParam: songArray[i].artists[0].name,
+        currentIndex: i,
+        newIndex: null
+      };
+      songArray.push(indices);
+    }
+  }
+
+}
+
 /** Shuffles the tracks of a specified playlist according to a specified
 shuffling method via repeated calls to the Spotify API **/
-app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(req, res){
+app.get('/shuffle/:shuffleStyle/:shuffleParam/:user_id/:playlist_id/:access_token', function(req, res){
   var playlist_id = req.params.playlist_id;
   var access_token = req.params.access_token;
   var shuffle_style = req.params.shuffleStyle;
+  var shuffle_param  = req.params.shuffleParam
   var user_id = req.params.user_id;
   var option = req.params.option;
 
@@ -269,8 +286,8 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
       newIndices = shuffles.randShuffle(tracks);
     }
     else if (shuffle_style === "spread"){
+      var songArray = extractShuffleParams(entries);
       newIndices = shuffles.spreadShuffle(tracks);
-      console.log(newIndices);
     }
     for (var i = 0; i < newIndices.length; i++) {
       if (newIndices[i].currentIndex !== newIndices[i].newIndex){

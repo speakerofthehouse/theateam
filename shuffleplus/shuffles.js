@@ -82,14 +82,7 @@ exports.spreadShuffle = function(songArray){
   var arrays = [];
   var indexHash = {};
   var numArtists = 0;
-  for (i = 0; i < songArray.length; i++){
-    var indices = {
-      shuffleParam: songArray[i].artists[0].name,
-      currentIndex: i,
-      newIndex: null
-    };
-    orig.push(indices);
-  }
+
   for (i = 0; i < orig.length; i++){
       if (indexHash[orig[i].shuffleParam] !== undefined){
         arrays[indexHash[orig[i].shuffleParam]].push(orig[i]);
