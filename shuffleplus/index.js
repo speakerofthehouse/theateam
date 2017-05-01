@@ -23,7 +23,7 @@ app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public')).use(cookieParser());;
 
 var client_id = 'd739d37b250a4deb902355e3e4bbb32d';
-var client_secret = '[Secret Redacted]';
+var client_secret = '9d16385d5beb4eb9a5a65b5b27391b8a';
 var redirect_uri = '';
 var env = '';
 
@@ -217,7 +217,9 @@ app.get('/get-categories/:user_id/:playlist_id/:bias_category/:access_token', fu
      }
 
      console.log(categories);
-     res.send(categories);
+     res.render("partials/categories", {
+       categories: categories
+     });
    });
 });
 
@@ -321,6 +323,7 @@ app.get('/shuffle/:shuffleStyle/:user_id/:playlist_id/:access_token', function(r
     }
    });
 });
+
 
 /** Listens for endpoint requests **/
 app.listen(app.get('port'), function() {
