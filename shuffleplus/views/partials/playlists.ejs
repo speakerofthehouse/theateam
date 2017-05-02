@@ -1,9 +1,10 @@
+
 <h2>Your Playlists:</h2>
 <div id="scroll-div">
 <ul id="playlists" >
   <% playlists.forEach(function(playlist){ %>
     <li>
-      <button id="<%= playlist.id %>" name="<%= playlist.id %>" onclick="renderTracklist(this)">
+      <button id="<%= playlist.id %>" name="<%= playlist.id %>" class="playlist" onclick="renderTracklist(this)">
         <%= playlist.name %>
       </button>
     </li>
