@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<link type="text/css" rel="stylesheet" href="basicstyle.css" />
+
 <html lang="en">
 <head>
   <% include ../partials/head %>
@@ -7,7 +9,7 @@
   <h1 id="head-div">Welcome, <%= name %>!</h1>
   <div id="main-div">
   <div id="pl-div"><% include ../partials/playlists %></div>
-  <div id="tl-div"></div>
+  <div id="tl-div"> <h2>Tracklist:</h2></div>
   <div id="shuffleoption-div"><% include ../partials/shuffleoptions %></div>
 </div>
 </body>
