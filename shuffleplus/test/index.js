@@ -99,21 +99,28 @@ describe("Shuffle Function", function(){
 		expect(Testarray.length).to.equal(10);
 	  });
 	});	
-/*
 	describe("Spread Shuffle", function(){
 	  it("Test Spread Shuffle", function(){    
-	    var testarray = [{artists: [{name: "Cake"}]}, {artists: [{name: "Cake"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pie"}]}, {artists: [{name: "Pancake"}]}, {artists: [{name: "Pancake"}]}, {artists: [{name: "Pancake"}]}],{artists: [{name: "Waffle"}]};
-	    var spread = shuffles.spreadShuffle(testarray);
+	    var Testarray = [{shuffleParam:"pie",currentIndex:0,newIndex:null},{shuffleParam:"pie",currentIndex:1,newIndex:null},{shuffleParam:"cake",currentIndex:2,newIndex:null},{shuffleParam:"cake",currentIndex:3,newIndex:null},{shuffleParam:"pancake",currentIndex:4,newIndex:null}];
+	    var spread = shuffles.spreadShuffle(Testarray);
 	    
-	    expect(testarray.length).to.equal(10);
+	    expect(Testarray.length).to.equal(5);
 	  });
 	});
 	
 	describe("Bias Shuffle", function(){
 	  it("Test Bias Shuffle", function(){
-	    request.get("http://localhost:8000/callback", function(res){
-		  expect(res.get.get.render).to.not.equal(undefined);
-	    });
+	    var Testarray = [{rank:"5",currentIndex:0,newIndex:null},{rank:"1",currentIndex:0,newIndex:null},{rank:"3",currentIndex:0,newIndex:null},{rank:"2",currentIndex:0,newIndex:null},{rank:"4",currentIndex:0,newIndex:null}];
+	    var bias = shuffles.biasedShuffle(Testarray);
+	    var Rank = Testarray[0].rank
+	    for (i=1; i<Testarray.length; i++){
+		  if (Testarray[i].rank > Testarray[i-1].rank){
+		    expect(Testarray.length).to.equal(10);
+		  }
+		  else if (i=Testarray.length-1){
+			expect(Testarray.length).to.equal(5);
+	      }
+	    }
 	  });
-	});*/
+	});
 });
