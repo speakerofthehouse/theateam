@@ -198,7 +198,6 @@ category **/
 app.get('/get-categories/:bias_category', function(req, res){
   console.log("Called get-categories");
   var biasCategory = req.params.bias_category;
-  console.log(tracks);
   var indexHash = {};
   var categories = [];
 
@@ -237,7 +236,6 @@ app.get('/get-categories/:bias_category', function(req, res){
     }
   }
 
-  console.log(categories);
   res.render("partials/categories", {
     categories: categories
   });
@@ -245,8 +243,6 @@ app.get('/get-categories/:bias_category', function(req, res){
 
 /** Creates an array of objects containing the specified param for each song **/
 var extractShuffleParams = function(songs, param){
-  console.log(songs);
-  console.log(param);
   var songArray = [];
   if (param === "artist"){
     for (i = 0; i < songs.length; i++){
@@ -318,6 +314,32 @@ var extractShuffleParams = function(songs, param){
   return songArray;
 }
 
+var rankTracks = function(tracks, rankings, category){
+  ranked = [];
+  for (i = 0; i < tracks.length; i++){
+    var indices = {
+      rank: null,
+      currentIndex: i,
+      newIndex: null
+    }
+
+    if (category === "title"){
+      indices.rank = rankings[tracks[i].name];
+      ranked.push(indices);
+    }
+    else if (category === "artist"){
+      indices.rank = rankings[tracks[i].artists[0].name];
+      ranked.push(indices);
+    }
+    else if (category === "explicit"){
+      indices.rank = rankings[tracks[i].explicit];
+      ranked.push(indices);
+    }
+  }
+
+  return ranked
+}
+
 /** Shuffles the tracks of a specified playlist according to a specified
 shuffling method via repeated calls to the Spotify API **/
 app.post('/shuffle', function(req, res){
@@ -327,8 +349,6 @@ app.post('/shuffle', function(req, res){
   var shuffle_param  = req.body.shuffleParam
   var user_id = req.body.user_id;
   var rankings = req.body.rankings;
-
-  /***Shuffle function(s) to go here***/
   var reorderOptions = {
      url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
      headers: {
@@ -339,22 +359,22 @@ app.post('/shuffle', function(req, res){
     }
 
   var done = false;
-  var newIndices;
-  var startTime;
-  var endTime;
-  var runTime;
-  startTime = now();
+  var newIndices = [];
 
   if (shuffle_style === "random"){
     newIndices = shuffles.randShuffle(tracks);
-    console.log(newIndices);
   }
   else if (shuffle_style === "spread"){
     var songArray = extractShuffleParams(tracks, shuffle_param);
-    console.log(songArray);
     newIndices = shuffles.spreadShuffle(songArray);
+  }
+  else if (shuffle_style === "biased"){
+    var ranked = rankTracks(tracks, rankings, shuffle_param);
+    console.log(ranked);
+    newIndices = shuffles.biasedShuffle(ranked);
     console.log(newIndices);
   }
+
   for (var i = 0; i < newIndices.length; i++) {
     if (newIndices[i].currentIndex !== newIndices[i].newIndex){
       reorderOptions.form = "{ \"range_start\" : " + newIndices[i].currentIndex + ", \"insert_before\" : " + newIndices[i].newIndex + " }";
@@ -375,7 +395,6 @@ app.post('/shuffle', function(req, res){
       deasync.sleep(10);
     }
     if (newIndices[i].newIndex < newIndices[i].currentIndex){
-      console.log("Updating Indices +");
       for (j = 0; j < newIndices.length; j++){
         //If the current index of the track is between the old and new indices of the reordered track
         if (newIndices[j].currentIndex >= newIndices[i].newIndex && newIndices[j].currentIndex < newIndices[i].currentIndex){
@@ -383,7 +402,6 @@ app.post('/shuffle', function(req, res){
         }
       }
     } else {
-      console.log("Updating Indices -");
       for (j = 0; j < newIndices.length; j++){
         //If the current index of the track is between the old and new indices of the reordered track
         if (newIndices[j].currentIndex < newIndices[i].newIndex && newIndices[j].currentIndex >= newIndices[i].currentIndex){

@@ -115,17 +115,25 @@ exports.biasedShuffle = function(songArray){
 
   //Sort the tracks by rank
   for (i = 0; i < songArray.length; i++){
-    for (j = 0; j < 5; j++){
-      if (songArray[i].rank == (5 - j)){
-        arrays[j].push(songArray[i]);
+    console.log(songArray[i].rank);
+    for (j = 1; j < 6; j++){
+      if (parseInt(songArray[i].rank) === j){
+        arrays[5-j].push(songArray[i]);
       }
     }
   }
-
+  console.log(arrays);
   for (i = 0; i < 5; i++){
-    shuffleArray(arrays[i]);
+    if (arrays[i].length > 1){
+      shuffleArray(arrays[i]);
+    }
+    console.log(arrays);
   }
 
-  //Return the merged subarrays
-  return [].concat.apply([], arrays);
+  fin_array = [].concat.apply([], arrays);
+  for (i = 0; i < fin_array.length; i++){
+    fin_array[i].newIndex = i;
+  }
+
+  return fin_array;
 }

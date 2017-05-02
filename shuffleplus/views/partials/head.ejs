@@ -7,7 +7,8 @@
       var shuffleType = "random";
       var shuffleParam = "";
       var beginning = "";
-      var rankings = [];
+      var rankings = {};
+
       if ("<%= env %>" === "Local") {
         beginning = "http://localhost:5000";
       } else {
@@ -17,6 +18,14 @@
       var renderTracklist = function(caller){
         //Get tracklist id from html button element
         currentPlaylist = caller.getAttribute("id");
+        $("#shuffleType-random").prop('checked', true);
+        $('#category-div').html("");
+        if ($("#spreadoptions").is(':visible')){
+          $('#spreadoptions').slideToggle("fast");
+        }
+        if ($("#biasoptions").is(':visible')){
+          $('#biasoptions').slideToggle("fast");
+        }
         //Call the get-tracks endpoint with the given playlist's id
         $.ajax({
           url: beginning + "/get-tracks/<%= user_id %>/" + currentPlaylist + "/<%= access_token %>",
@@ -39,6 +48,10 @@
         }
         $("#tl-div").html("<p>Shuffling...</p>");
         url = beginning + "/shuffle";
+        if (shuffleType === "biased"){
+          getRanks(rankings);
+          console.log(rankings);
+        }
         $.ajax({
           url: url,
           type: "POST",
@@ -70,6 +83,14 @@
         }).done(function(data){
           $("#category-div").html(data);
         });
+      }
+
+      var getRanks = function(rankings){
+        var nodeList = document.getElementsByTagName("select");
+        var categories = Array.from(nodeList);
+        for (i = 0; i < categories.length; i++){
+          rankings[categories[i].name] = categories[i].value;
+        }
       }
 
       $(document).ready(function(){
@@ -106,6 +127,7 @@
         $("input[name=bias-category]:radio").change(function(){
           shuffleParam = $(this).val();
           getCategories();
+          getRanks();
         });
 
       });
