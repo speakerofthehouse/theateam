@@ -8,6 +8,7 @@ const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
 const deasync = require('deasync');
 const shuffles = require('./shuffles');
+const bodyParser = require('body-parser');
 const now = require('performance-now');
 const app = express();
 
@@ -21,11 +22,16 @@ app.set('port', (process.env.PORT || 5000));
 
 //Render views in public directory
 app.use(express.static(__dirname + '/public')).use(cookieParser());;
+app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
 var client_id = 'd739d37b250a4deb902355e3e4bbb32d';
 var client_secret = '9d16385d5beb4eb9a5a65b5b27391b8a';
 var redirect_uri = '';
 var env = '';
+var tracks = [];
 
 if (app.get('port') !== 5000) {
   redirect_uri = 'http://shuffleplus.herokuapp.com/callback';
@@ -172,6 +178,13 @@ app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
 
    //GET tracks
    request.get(options, function(error, response, body) {
+     var entries = body.items;  //Array of playlist entry objects
+     var length = body.total;   //Length of playlist
+     var pl_tracks = []
+     for (i = 0; i < length; i++){
+       pl_tracks.push(entries[i].track);
+     }
+     tracks = pl_tracks;
      res.render('partials/tracklist', {
        songs: body.items,
        user_id: user_id,
@@ -182,56 +195,63 @@ app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
 
 /** Returns all different entries from the specified playlist of the specified
 category **/
-app.get('/get-categories/:user_id/:playlist_id/:bias_category/:access_token', function(req, res){
+app.get('/get-categories/:bias_category', function(req, res){
   console.log("Called get-categories");
-  var playlist_id = req.params.playlist_id;
-  var access_token = req.params.access_token;
-  var user_id = req.params.user_id;
   var biasCategory = req.params.bias_category;
+  console.log(tracks);
+  var indexHash = {};
+  var categories = [];
 
-  var options = {
-     url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
-     headers: { 'Authorization': 'Bearer ' + access_token },
-     json: true
-   };
+  if (biasCategory !== "artist"){
+    var param;
+    switch (biasCategory){
+      case ("title"):
+        param = "name";
+        break;
+      case ("explicit"):
+        param = "explicit";
+        break;
+    }
 
-   //GET tracks
-   request.get(options, function(error, response, body) {
-     var indexHash = {};
-     var items = body.items;
-     var categories = [];
-     var hashParam;
-     if (biasCategory === "title"){
-       for (i = 0; i < items.length; i++){
-         if (indexHash[items[i].track.name] === undefined){
-           categories.push(items[i].track.name);
-           indexHash[items[i].track.name] = 1;
-         }
-       }
-     }
-     else if (biasCategory === "artist") {
-       for (i = 0; i < items.length; i++){
-         if (indexHash[items[i].track.artists[0].name] === undefined){
-           categories.push(items[i].track.artists[0].name);
-           indexHash[items[i].track.artists[0].name] = 1;
-         }
-       }
-     }
+    for (i = 0; i < tracks.length; i++){
+      if (indexHash[tracks[i][param]] === undefined){
+        categories.push(tracks[i][param]);
+        indexHash[tracks[i][param]] = 1;
+      }
+    }
+  }
+  else if (biasCategory === "artist") {
+    for (i = 0; i < tracks.length; i++){
+      if (indexHash[tracks[i].artists[0].name] === undefined){
+        categories.push(tracks[i].artists[0].name);
+        indexHash[tracks[i].artists[0].name] = 1;
+      }
+    }
+  }
+  else if (biasCategory === "album") {
+    for (i = 0; i < tracks.length; i++){
+      if (indexHash[tracks[i].album.name] === undefined){
+        categories.push(tracks[i].album.name);
+        indexHash[tracks[i].album.name] = 1;
+      }
+    }
+  }
 
-     console.log(categories);
-     res.render("partials/categories", {
-       categories: categories
-     });
-   });
+  console.log(categories);
+  res.render("partials/categories", {
+    categories: categories
+  });
 });
 
 /** Creates an array of objects containing the specified param for each song **/
 var extractShuffleParams = function(songs, param){
+  console.log(songs);
+  console.log(param);
   var songArray = [];
   if (param === "artist"){
     for (i = 0; i < songs.length; i++){
       var indices = {
-        shuffleParam: songArray[i].artists[0].name,
+        shuffleParam: songs[i].artists[0].name,
         currentIndex: i,
         newIndex: null
       };
@@ -241,7 +261,7 @@ var extractShuffleParams = function(songs, param){
   else if (param === "album"){
     for (i = 0; i < songs.length; i++){
       var indices = {
-        shuffleParam: songArray[i].album.name,
+        shuffleParam: songs[i].album.name,
         currentIndex: i,
         newIndex: null
       };
@@ -250,7 +270,7 @@ var extractShuffleParams = function(songs, param){
   }
   else if (param === "popularity"){
     for (i = 0; i < songs.length; i++){
-      var pop = songArray[i].popularity;
+      var pop = songs[i].popularity;
       switch (pop) {
         case (pop > 90):
           pop = 9;
@@ -300,117 +320,84 @@ var extractShuffleParams = function(songs, param){
 
 /** Shuffles the tracks of a specified playlist according to a specified
 shuffling method via repeated calls to the Spotify API **/
-app.get('/shuffle/:shuffleStyle/:shuffleParam/:user_id/:playlist_id/:access_token', function(req, res){
-  var playlist_id = req.params.playlist_id;
-  var access_token = req.params.access_token;
-  var shuffle_style = req.params.shuffleStyle;
-  var shuffle_param  = req.params.shuffleParam
-  var user_id = req.params.user_id;
-  var option = req.params.option;
+app.post('/shuffle', function(req, res){
+  var playlist_id = req.body.playlist_id;
+  var access_token = req.body.access_token;
+  var shuffle_style = req.body.shuffleStyle;
+  var shuffle_param  = req.body.shuffleParam
+  var user_id = req.body.user_id;
+  var rankings = req.body.rankings;
 
-  var options = {
+  /***Shuffle function(s) to go here***/
+  var reorderOptions = {
      url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
-     headers: { 'Authorization': 'Bearer ' + access_token },
-     json: true
-   };
-
-   //GET tracks
-   request.get(options, function(error, response, body) {
-     var entries = body.items;  //Array of playlist entry objects
-     var length = body.total;   //Length of playlist
-     var tracks = [];           //Array of track objects in playlist
-     for (i = 0; i < length; i++){
-       tracks.push(entries[i].track);
-     }
-     console.log(tracks);
-     /***Shuffle function(s) to go here***/
-     var reorderOptions = {
-       url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
-       headers: {
-         'Authorization': 'Bearer ' + access_token,
-         'Content-Type' : 'application/json'
-       },
-       form: ""
-     }
-
-    var done = false;
-    var newIndices;
-    var startTime;
-    var endTime;
-    var runTime;
-    startTime = now();
-
-    if (shuffle_style === "random"){
-      newIndices = shuffles.randShuffle(tracks);
-      console.log(newIndices);
+     headers: {
+       'Authorization': 'Bearer ' + access_token,
+       'Content-Type' : 'application/json'
+     },
+     form: ""
     }
-    else if (shuffle_style === "spread"){
-      var songArray = extractShuffleParams(tracks, shuffle_param);
-      console.log(songArray);
-      newIndices = shuffles.spreadShuffle(songArray);
-      console.log(newIndices);
+
+  var done = false;
+  var newIndices;
+  var startTime;
+  var endTime;
+  var runTime;
+  startTime = now();
+
+  if (shuffle_style === "random"){
+    newIndices = shuffles.randShuffle(tracks);
+    console.log(newIndices);
+  }
+  else if (shuffle_style === "spread"){
+    var songArray = extractShuffleParams(tracks, shuffle_param);
+    console.log(songArray);
+    newIndices = shuffles.spreadShuffle(songArray);
+    console.log(newIndices);
+  }
+  for (var i = 0; i < newIndices.length; i++) {
+    if (newIndices[i].currentIndex !== newIndices[i].newIndex){
+      reorderOptions.form = "{ \"range_start\" : " + newIndices[i].currentIndex + ", \"insert_before\" : " + newIndices[i].newIndex + " }";
+      console.log(reorderOptions.form);
+      request.put(reorderOptions, function(error, response, body){
+          if (!error && response.statusCode === 200) {
+            console.log("Reorder Success");
+            done = true;
+          } else {
+            console.log(body);
+            done = true;
+          }
+      });
+    } else {
+      done = true;
     }
-    for (var i = 0; i < newIndices.length; i++) {
-      if (newIndices[i].currentIndex !== newIndices[i].newIndex){
-        reorderOptions.form = "{ \"range_start\" : " + newIndices[i].currentIndex + ", \"insert_before\" : " + newIndices[i].newIndex + " }";
-        console.log(reorderOptions.form);
-        request.put(reorderOptions, function(error, response, body){
-             if (!error && response.statusCode === 200) {
-               if (i === (newIndices.length - 1)){
-                 console.log("Shuffle Complete");
-                 endTime = now();
-                 runTime = endTime - startTime;
-                 console.log("Total Shuffle Time: " + runTime.toFixed(3).toString());
-                 res.send("Shuffle Success");
-               } else {
-                 console.log("Reorder Success");
-                 if (newIndices[i].newIndex < newIndices[i].currentIndex){
-                   for (j = 0; j < newIndices.length; j++){
-                     //If the current index of the track is between the old and new indices of the reordered track
-                     if (newIndices[j].currentIndex >= newIndices[i].newIndex && newIndices[j].currentIndex < newIndices[i].currentIndex){
-                       newIndices[j].currentIndex++;
-                     }
-                   }
-                 } else {
-                   for (j = 0; j < newIndices.length; j++){
-                     //If the current index of the track is between the old and new indices of the reordered track
-                     if (newIndices[j].currentIndex < newIndices[i].newIndex && newIndices[j].currentIndex >= newIndices[i].currentIndex){
-                       newIndices[j].currentIndex--;
-                     }
-                   }
-                 }
-                 newIndices[i].currentIndex == newIndices[i].newIndex;
-                 done = true;
-               }
-             }
-             else{
-               if (i === (newIndices.length - 1)){
-                 console.log("Shuffle Complete");
-                 endTime = now();
-                 runTime = endTime - startTime;
-                 console.log("Total Shuffle Time: " + string(runTime.toFixed(3)));
-                 res.send("Shuffle Success");
-               } else {
-                 console.log(body);
-                 done = true;
-               }
-             }
-        });
-        while(!done){
-          deasync.sleep(10);
+    while(!done){
+      deasync.sleep(10);
+    }
+    if (newIndices[i].newIndex < newIndices[i].currentIndex){
+      console.log("Updating Indices +");
+      for (j = 0; j < newIndices.length; j++){
+        //If the current index of the track is between the old and new indices of the reordered track
+        if (newIndices[j].currentIndex >= newIndices[i].newIndex && newIndices[j].currentIndex < newIndices[i].currentIndex){
+          newIndices[j].currentIndex++;
         }
-        done = false;
+      }
+    } else {
+      console.log("Updating Indices -");
+      for (j = 0; j < newIndices.length; j++){
+        //If the current index of the track is between the old and new indices of the reordered track
+        if (newIndices[j].currentIndex < newIndices[i].newIndex && newIndices[j].currentIndex >= newIndices[i].currentIndex){
+          newIndices[j].currentIndex--;
+        }
       }
     }
-   });
+    newIndices[i].currentIndex == newIndices[i].newIndex;
+    done = false;
+  }
+  console.log("Shuffle Complete");
+  res.send("Shuffle Success");
 });
 
-app.post('/recieve_message', function(req, res){
-  console.log("Receiving messages");
-  var messages = req.data;
-  console.log(messages.message1);
-  console.log(messages.message2);
-})
 
 /** Listens for endpoint requests **/
 app.listen(app.get('port'), function() {
