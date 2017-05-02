@@ -22,6 +22,7 @@ h2 {
 ul {
   list-style-type: none;
   padding-left: 0px;
+ 
 }
 
 /*iframe {
@@ -49,15 +50,25 @@ ul {
 }
 
 #scroll-div {
-
+  position: absolute;
   width:100%;
   bottom:25px;
   overflow:hidden;
   overflow-y:scroll;
   height:530px;
-  text-align: center;
+  text-align: left;
 }
 
+#scroll-div-shuffle {
+  position: absolute;
+  width:97%;
+  bottom:25px;
+  overflow:hidden;
+  overflow-y:scroll;
+  height:530px;
+  text-align: center;
+  padding-left:3%;
+}
 
 
 #tl-div {
@@ -72,6 +83,7 @@ ul {
   border-radius: 25px;
   list-style:none;
   padding-left:0;
+  text-align: center;
 
 
 }

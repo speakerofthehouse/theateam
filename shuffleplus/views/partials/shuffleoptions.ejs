@@ -1,12 +1,23 @@
-<p id="error_message"></p>
-<button name="shufflemaster" onclick="shufflePlaylist()">Shuffle</button>
-<h2>Shuffle Options:</h2>
+
+
+<div id="scroll-div-shuffle">
+
+  <p>
+  <p id="error_message"></p>
+    <button name="shufflemaster" onclick="shufflePlaylist()">Shuffle</button>
+    <button name="getCat" onclick="getCategories(this)">Get Categories</button>
+  </p>
+  <p></p>
+
+<form action="">
+
   <label for="shuffleType-random">Random</label>
   <input type="radio" name="shuffleTypeBtn" id="shuffleType-random" value="random" /><br />
   <label for="shuffleType-spread">Spread</label>
   <input type="radio" name="shuffleTypeBtn" id="shuffleType-spread" value="spread" /><br />
   <label for="shuffleType-biased">Biased</label>
   <input type="radio" name="shuffleTypeBtn" id="shuffleType-biased" value="biased" />
+
   <div id="spreadoptions">
     <h3>Spread By:</h3>
     <label for="spreadParam-artist">Artist</label>
@@ -18,6 +29,7 @@
     <label for="internalshuffle">Internal Shuffle</label>
     <input type="checkbox" id="internalshuffle" value="Internal Shuffle" />
   </div>
+
   <div id="biasoptions">
     <h3>Bias By:</h3>
     <label for="bias-category-title">Title</label>
@@ -30,3 +42,8 @@
     <input type="radio" name="bias-category" id="bias-category-explicit" value="explicit" />
     <div id="category-div"></div>
   </div>
+
+</form>
+
+</div>
+
