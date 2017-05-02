@@ -3,45 +3,45 @@
 <div id="scroll-div-shuffle">
 
   <p>
+  <p id="error_message"></p>
     <button name="shufflemaster" onclick="shufflePlaylist()">Shuffle</button>
     <button name="getCat" onclick="getCategories(this)">Get Categories</button>
   </p>
   <p></p>
 
 <form action="">
+
   <label for="shuffleType-random">Random</label>
-  <input type="radio" name="shuffleType" id="shuffleType-random" value="random" />
+  <input type="radio" name="shuffleTypeBtn" id="shuffleType-random" value="random" /><br />
   <label for="shuffleType-spread">Spread</label>
-  <input type="radio" name="shuffleType" id="shuffleType-spread" value="spread" />
-  <label for="shuffleType-spread">Biased</label>
-  <input type="radio" name="shuffleType" id="shuffleType-biased" value="biased" />
+  <input type="radio" name="shuffleTypeBtn" id="shuffleType-spread" value="spread" /><br />
+  <label for="shuffleType-biased">Biased</label>
+  <input type="radio" name="shuffleTypeBtn" id="shuffleType-biased" value="biased" />
   <div id="spreadoptions">
     <h3>Spread By:</h3>
     <label for="spreadParam-artist">Artist</label>
-    <input type="radio" name="spreadParam" id="spreadParam-artist" value="Artist" />
-    <label for="spreadParam-album">Artist</label>
-    <input type="radio" name="spreadParam" id="spreadParam-album" value="Album" />
-    <label for="spreadParam-explicit">Explicit</label>
-    <input type="radio" name="spreadParam" id="spreadParam-explicit" value="Explicit" />
+    <input type="radio" name="spreadParam" id="spreadParam-artist" value="artist" /><br />
+    <label for="spreadParam-album">Album</label>
+    <input type="radio" name="spreadParam" id="spreadParam-album" value="album" /><br />
     <label for="spreadParam-popularity">Popularity</label>
-    <input type="radio" name="spreadParam" id="spreadParam-popularity" value="Popularity" />
+    <input type="radio" name="spreadParam" id="spreadParam-popularity" value="popularity" /><br />
     <label for="internalshuffle">Internal Shuffle</label>
     <input type="checkbox" id="internalshuffle" value="Internal Shuffle" />
   </div>
-  <label for="shuffleType-biased">Biased</label>
-  <input type="radio" name="shuffleType" id="shuffleType-biased" value="biased" />
   <div id="biasoptions">
     <h3>Bias By:</h3>
     <label for="bias-category-title">Title</label>
-    <input type="radio" name="bias-category" id="bias-category-title" value="title" />
+    <input type="radio" name="bias-category" id="bias-category-title" value="title" /><br />
     <label for="bias-category-title">Artist</label>
-    <input type="radio" name="bias-category" id="bias-category-artist" value="artist" />
+    <input type="radio" name="bias-category" id="bias-category-artist" value="artist" /><br />
     <label for="bias-category-title">Album</label>
-    <input type="radio" name="bias-category" id="bias-category-album" value="album" />
+    <input type="radio" name="bias-category" id="bias-category-album" value="album" /><br />
     <label for="bias-category-title">Explicit</label>
     <input type="radio" name="bias-category" id="bias-category-explicit" value="explicit" />
     <div id="category-div"></div>
   </div>
+
 </form>
 
 </div>
+

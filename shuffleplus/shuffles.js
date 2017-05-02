@@ -78,7 +78,7 @@ index arrangement for the tracks in the playlist such that tracks with the
 same value for a given attribute are as separated from one another as possible
  **/
 exports.spreadShuffle = function(songArray){
-  var orig = [];
+  var orig = songArray;
   var arrays = [];
   var indexHash = {};
   var numArtists = 0;

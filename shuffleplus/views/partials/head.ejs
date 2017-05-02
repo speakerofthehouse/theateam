@@ -3,16 +3,17 @@
 <link type="text/css" rel="stylesheet" href="basicstyle.css" />
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
-      var currentPlaylist;
-      var shuffleType;
-      var shuffleParam = "artist";
-
+      var currentPlaylist = "";
+      var shuffleType = "random";
+      var shuffleParam = "";
       var beginning = "";
+      var rankings = [];
       if ("<%= env %>" === "Local") {
         beginning = "http://localhost:5000";
       } else {
         beginning = "shuffleplus.herokuapp.com";
       }
+
       var renderTracklist = function(caller){
         //Get tracklist id from html button element
         currentPlaylist = caller.getAttribute("id");
@@ -23,19 +24,35 @@
         }).done(function(data){
           //Append the returned html to the tracklist div
           $("#tl-div").html(data);
-          console.log(tracks);
-          //Make a Spotify play button widget and prepend it to the tracklist div
         });
-      };
+      }
 
       var shufflePlaylist = function(caller){
+        $("#error_message").html("");
+        if (currentPlaylist === ""){
+          $("#error_message").html("Please select a playlist");
+          return
+        }
+        if (shuffleParam === "" && shuffleType !== "random") {
+          $("#error_message").html("Please select a category to shuffle by");
+          return
+        }
         $("#tl-div").html("<p>Shuffling...</p>");
-        shuffleType = caller.getAttribute("name");
+        url = beginning + "/shuffle";
         $.ajax({
-          url: beginning + "/shuffle/" + shuffleType + "/<%= user_id %>/" + currentPlaylist +  "/<%= access_token %>",
+          url: url,
+          type: "POST",
+          data: {
+            playlist_id: currentPlaylist,
+            access_token: "<%= access_token %>",
+            shuffleStyle: shuffleType,
+            shuffleParam: shuffleParam,
+            user_id: <%= user_id %>,
+            rankings: rankings
+          },
           context: document.body
         }).done(function(data){
-          if (data === "Shuffle Success"){
+          if (data === "Shuffle Success") {
             console.log("Shuffle Success");
             document.getElementsByName(currentPlaylist)[0].click();
           }
@@ -48,25 +65,48 @@
       var getCategories = function(){
         console.log("Getting categories");
         $.ajax({
-          url: beginning + "/get-categories/<%= user_id %>/" + currentPlaylist + "/" + shuffleParam +  "/<%= access_token %>",
+          url: beginning + "/get-categories/" + shuffleParam,
           context: document.body
         }).done(function(data){
           $("#category-div").html(data);
         });
       }
 
-      $("#shuffleType-random").focus(function(){
-        shuffleType = "random";
-        console.log("Switched to random");
-      });
+      $(document).ready(function(){
+        $("#shuffleType-random").attr('checked','checked');
+        $("input[name=shuffleTypeBtn]:radio").change(function(){
+          shuffleType = $(this).val();
+          shuffleParam = "";
+          if (shuffleType === "spread"){
+            if ($("#biasoptions").is(':visible')){
+              $('#biasoptions').slideToggle("fast");
+            }
+            $('#spreadoptions').slideToggle("fast");
+          }
+          else if (shuffleType === "biased"){
+            if ($("#spreadoptions").is(':visible')){
+              $('#spreadoptions').slideToggle("fast");
+            }
+            $('#biasoptions').slideToggle("fast");
+          }
+          else if (shuffleType === "random"){
+            if ($("#spreadoptions").is(':visible')){
+              $('#spreadoptions').slideToggle("fast");
+            }
+            if ($("#biasoptions").is(':visible')){
+              $('#biasoptions').slideToggle("fast");
+            }
+          }
+        });
 
-      $("#shuffleType-spread").focus(function(){
-        shuffleType = "spread";
-        console.log("Switched to spread");
-      });
+        $("input[name=spreadParam]:radio").change(function(){
+          shuffleParam = $(this).val();
+        });
 
-      $("#shuffleType-biased").focus(function(){
-        shuffleType = "biased";
-        console.log("Switched to biased");
+        $("input[name=bias-category]:radio").change(function(){
+          shuffleParam = $(this).val();
+          getCategories();
+        });
+
       });
 </script>
