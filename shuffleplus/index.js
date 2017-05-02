@@ -227,9 +227,9 @@ app.get('/get-categories/:user_id/:playlist_id/:bias_category/:access_token', fu
 
 /** Creates an array of objects containing the specified param for each song **/
 var extractShuffleParams = function(songs, param){
-  var songArray = []''
+  var songArray = [];
   if (param === "artist"){
-    for (i = 0; i < songArray.length; i++){
+    for (i = 0; i < songs.length; i++){
       var indices = {
         shuffleParam: songArray[i].artists[0].name,
         currentIndex: i,
@@ -238,7 +238,64 @@ var extractShuffleParams = function(songs, param){
       songArray.push(indices);
     }
   }
+  else if (param === "album"){
+    for (i = 0; i < songs.length; i++){
+      var indices = {
+        shuffleParam: songArray[i].album.name,
+        currentIndex: i,
+        newIndex: null
+      };
+      songArray.push(indices);
+    }
+  }
+  else if (param === "popularity"){
+    for (i = 0; i < songs.length; i++){
+      var pop = songArray[i].popularity;
+      switch (pop) {
+        case (pop > 90):
+          pop = 9;
+          break;
+        case (pop < 90 && pop >= 80):
+          pop = 8;
+          break;
+        case (pop < 80 && pop >= 70):
+          pop = 7;
+          break;
+        case (pop < 70 && pop >= 60):
+          pop = 6;
+          break;
+        case (pop < 60 && pop >= 50):
+          pop = 5;
+          break;
+        case (pop < 50 && pop >= 40):
+          pop = 4;
+          break;
+        case (pop < 40 && pop >= 30):
+          pop = 3;
+          break;
+        case (pop < 30 && pop >= 20):
+          pop = 2;
+          break;
+        case (pop < 20 && pop >= 10):
+          pop = 10;
+          break;
+        case (pop < 10):
+          pop = 0;
+          break;
+        default:
+          console.log("Error in getting popularities");
+          break;
+      }
+      var indices = {
+        shuffleParam: pop,
+        currentIndex: i,
+        newIndex: null
+      };
+      songArray.push(indices);
+    }
+  }
 
+  return songArray;
 }
 
 /** Shuffles the tracks of a specified playlist according to a specified
@@ -265,6 +322,7 @@ app.get('/shuffle/:shuffleStyle/:shuffleParam/:user_id/:playlist_id/:access_toke
      for (i = 0; i < length; i++){
        tracks.push(entries[i].track);
      }
+     console.log(tracks);
      /***Shuffle function(s) to go here***/
      var reorderOptions = {
        url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
@@ -284,10 +342,13 @@ app.get('/shuffle/:shuffleStyle/:shuffleParam/:user_id/:playlist_id/:access_toke
 
     if (shuffle_style === "random"){
       newIndices = shuffles.randShuffle(tracks);
+      console.log(newIndices);
     }
     else if (shuffle_style === "spread"){
-      var songArray = extractShuffleParams(entries);
-      newIndices = shuffles.spreadShuffle(tracks);
+      var songArray = extractShuffleParams(tracks, shuffle_param);
+      console.log(songArray);
+      newIndices = shuffles.spreadShuffle(songArray);
+      console.log(newIndices);
     }
     for (var i = 0; i < newIndices.length; i++) {
       if (newIndices[i].currentIndex !== newIndices[i].newIndex){
@@ -312,7 +373,8 @@ app.get('/shuffle/:shuffleStyle/:shuffleParam/:user_id/:playlist_id/:access_toke
                    }
                  } else {
                    for (j = 0; j < newIndices.length; j++){
-                     if (newIndices[j].currentIndex > newIndices[i].currentIndex && newIndices[j].currentIndex < newIndices[i].newIndex){
+                     //If the current index of the track is between the old and new indices of the reordered track
+                     if (newIndices[j].currentIndex < newIndices[i].newIndex && newIndices[j].currentIndex >= newIndices[i].currentIndex){
                        newIndices[j].currentIndex--;
                      }
                    }
@@ -343,6 +405,12 @@ app.get('/shuffle/:shuffleStyle/:shuffleParam/:user_id/:playlist_id/:access_toke
    });
 });
 
+app.post('/recieve_message', function(req, res){
+  console.log("Receiving messages");
+  var messages = req.data;
+  console.log(messages.message1);
+  console.log(messages.message2);
+})
 
 /** Listens for endpoint requests **/
 app.listen(app.get('port'), function() {

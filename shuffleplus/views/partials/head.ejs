@@ -3,16 +3,16 @@
 <link type="text/css" rel="stylesheet" href="basicstyle.css" />
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
-      var currentPlaylist;
-      var shuffleType;
-      var shuffleParam = "artist";
-
+      var currentPlaylist = "";
+      var shuffleType = "random";
+      var shuffleParam = "";
       var beginning = "";
       if ("<%= env %>" === "Local") {
         beginning = "http://localhost:5000";
       } else {
         beginning = "shuffleplus.herokuapp.com";
       }
+
       var renderTracklist = function(caller){
         //Get tracklist id from html button element
         currentPlaylist = caller.getAttribute("id");
@@ -23,19 +23,27 @@
         }).done(function(data){
           //Append the returned html to the tracklist div
           $("#tl-div").html(data);
-          console.log(tracks);
-          //Make a Spotify play button widget and prepend it to the tracklist div
         });
-      };
+      }
 
       var shufflePlaylist = function(caller){
+        $("#error_message").html("");
+        if (currentPlaylist === ""){
+          $("#error_message").html("Please select a playlist");
+          return
+        }
+        if (shuffleParam === "") {
+          $("#error_message").html("Please select a category to shuffle by");
+          return
+        }
         $("#tl-div").html("<p>Shuffling...</p>");
-        shuffleType = caller.getAttribute("name");
+        url = beginning + "/shuffle/" + shuffleType + "/" + shuffleParam + "/<%= user_id %>/" + currentPlaylist +  "/<%= access_token %>"
+        console.log(url);
         $.ajax({
-          url: beginning + "/shuffle/" + shuffleType + "/<%= user_id %>/" + currentPlaylist +  "/<%= access_token %>",
+          url: url,
           context: document.body
         }).done(function(data){
-          if (data === "Shuffle Success"){
+          if (data === "Shuffle Success") {
             console.log("Shuffle Success");
             document.getElementsByName(currentPlaylist)[0].click();
           }
@@ -55,18 +63,53 @@
         });
       }
 
-      $("#shuffleType-random").focus(function(){
-        shuffleType = "random";
-        console.log("Switched to random");
-      });
+      var sendMessages = function(caller){
+        console.log("Sendin em out!");
+        var messages = {
+          message1: "We made it!",
+          message2: "Break out the booze!"
+        }
 
-      $("#shuffleType-spread").focus(function(){
-        shuffleType = "spread";
-        console.log("Switched to spread");
-      });
+        $.ajax({
+          url:beginning + "/recieve_message",
+          data: "{ message1: 'We made it!', message2: 'Break out the booze!'",
+          type: "POST"
+        });
+      }
 
-      $("#shuffleType-biased").focus(function(){
-        shuffleType = "biased";
-        console.log("Switched to biased");
+      $(document).ready(function(){
+        $("#shuffleType-random").attr('checked','checked');
+        $("input[name=shuffleTypeBtn]:radio").change(function(){
+          shuffleType = $(this).val();
+          shuffleParam = "";
+          if (shuffleType === "spread"){
+            if ($("#biasoptions").is(':visible')){
+              $('#biasoptions').slideToggle("fast");
+            }
+            $('#spreadoptions').slideToggle("fast");
+          }
+          else if (shuffleType === "biased"){
+            if ($("#spreadoptions").is(':visible')){
+              $('#spreadoptions').slideToggle("fast");
+            }
+            $('#biasoptions').slideToggle("fast");
+          }
+          else if (shuffleType === "random"){
+            if ($("#spreadoptions").is(':visible')){
+              $('#spreadoptions').slideToggle("fast");
+            }
+            if ($("#biasoptions").is(':visible')){
+              $('#biasoptions').slideToggle("fast");
+            }
+          }
+        });
+
+        $("input[name=spreadParam]:radio").change(function(){
+          shuffleParam = $(this).val();
+        });
+
+        $("input[name=bias-category]:radio").change(function(){
+          shuffleParam = $(this).val();
+        });
       });
 </script>
