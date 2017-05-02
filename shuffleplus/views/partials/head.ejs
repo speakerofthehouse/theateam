@@ -18,6 +18,12 @@
       var renderTracklist = function(caller){
         //Get tracklist id from html button element
         currentPlaylist = caller.getAttribute("id");
+        var src = "https://embed.spotify.com/?uri=spotify:user:<%= user_id %>:playlist:"+ currentPlaylist + "&theme=white&view=coverart";
+        var player = document.createElement("iframe");
+        player.setAttribute("frameborder", "0");
+        player.setAttribute("allowtransparency", "true");
+        player.setAttribute("src", src);
+        $("#player-div").html(player);
         $("#shuffleType-random").prop('checked', true);
         $('#category-div').html("");
         if ($("#spreadoptions").is(':visible')){
