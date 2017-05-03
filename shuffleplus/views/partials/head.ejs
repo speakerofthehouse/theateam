@@ -12,7 +12,7 @@
       if ("<%= env %>" === "Local") {
         beginning = "http://localhost:5000";
       } else {
-        beginning = "shuffleplus.herokuapp.com";
+        beginning = "http://shuffleplus.herokuapp.com";
       }
 
       var renderTracklist = function(caller){
@@ -29,12 +29,6 @@
         }
         //Get tracklist id from html button element
         currentPlaylist = caller.getAttribute("id");
-        var src = "https://embed.spotify.com/?uri=spotify:user:<%= user_id %>:playlist:"+ currentPlaylist + "&theme=white&view=coverart";
-        var player = document.createElement("iframe");
-        player.setAttribute("frameborder", "0");
-        player.setAttribute("allowtransparency", "true");
-        player.setAttribute("src", src);
-        $("#player-div").html(player);
 
         //Call the get-tracks endpoint with the given playlist's id
         $.ajax({
@@ -43,6 +37,12 @@
         }).done(function(data){
           //Append the returned html to the tracklist div
           $("#tl-div").html(data);
+          var src = "https://embed.spotify.com/?uri=spotify:user:<%= user_id %>:playlist:"+ currentPlaylist + "&theme=white&view=coverart";
+          var player = document.createElement("iframe");
+          player.setAttribute("frameborder", "0");
+          player.setAttribute("allowtransparency", "true");
+          player.setAttribute("src", src);
+          $("#tl-div").prepend(player);
         });
       }
 
