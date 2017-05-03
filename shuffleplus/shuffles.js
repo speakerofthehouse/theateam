@@ -92,6 +92,7 @@ exports.spreadShuffle = function(songArray){
         arrays.push([orig[i]]);
       }
   }
+
   var max = findMaxLength(arrays);
   for (i = 0; i < arrays.length; i++){
     if (arrays[i].length < max){

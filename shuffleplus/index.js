@@ -201,7 +201,9 @@ app.get('/get-categories/:bias_category', function(req, res){
   var indexHash = {};
   var categories = [];
 
-  if (biasCategory !== "artist"){
+  console.log(biasCategory);
+
+  if (biasCategory !== "artist" && biasCategory !== "album"){
     var param;
     switch (biasCategory){
       case ("title"):
@@ -235,7 +237,7 @@ app.get('/get-categories/:bias_category', function(req, res){
       }
     }
   }
-
+  console.log(categories);
   res.render("partials/categories", {
     categories: categories
   });
@@ -329,6 +331,10 @@ var rankTracks = function(tracks, rankings, category){
     }
     else if (category === "artist"){
       indices.rank = rankings[tracks[i].artists[0].name];
+      ranked.push(indices);
+    }
+    else if (category === "album"){
+      indices.rank = rankings[tracks[i].album.name];
       ranked.push(indices);
     }
     else if (category === "explicit"){
