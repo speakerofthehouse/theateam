@@ -35,14 +35,14 @@
           url: beginning + "/get-tracks/<%= user_id %>/" + currentPlaylist + "/<%= access_token %>",
           context: document.body
         }).done(function(data){
-          //Append the returned html to the tracklist div
           $("#tl-div").html(data);
           var src = "https://embed.spotify.com/?uri=spotify:user:<%= user_id %>:playlist:"+ currentPlaylist + "&theme=white&view=coverart";
           var player = document.createElement("iframe");
           player.setAttribute("frameborder", "0");
           player.setAttribute("allowtransparency", "true");
           player.setAttribute("src", src);
-          $("#tl-div").prepend(player);
+          $("#tracks").prepend(player);
+          //Append the returned html to the tracklist div
         });
       }
 

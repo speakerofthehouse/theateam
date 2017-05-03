@@ -178,7 +178,12 @@ ul {
 }
 
 #tracks {
-  padding-top: 30px;
+  padding-top: 72px;
+}
+
+.col-name {
+  position: relative;
+  top: -10px;
 }
 
 .bttn {

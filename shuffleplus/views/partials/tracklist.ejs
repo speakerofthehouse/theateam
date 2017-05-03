@@ -1,10 +1,10 @@
-<h2>Tracklist:</h2>
 <div id="scroll-div-tl">
-
+<div id="tracks">
 <ul>
 <% songs.forEach(function(song){ %>
   <li class="ellipsis"><b><%= song.track.name %> :: </b><%= song.track.artists[0].name %></li>
 <% }); %>
 </ul>
+</div>
 </div>
 </div>
