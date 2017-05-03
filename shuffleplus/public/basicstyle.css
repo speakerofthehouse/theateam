@@ -169,6 +169,15 @@ ul {
 
 }
 
+#player-div{
+  position: absolute;
+  width:15%;
+  top:100px;
+  left:42.5%;
+
+
+}
+
 #spreadoptions {
   display: none
 }
