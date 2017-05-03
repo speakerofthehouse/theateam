@@ -16,6 +16,17 @@
       }
 
       var renderTracklist = function(caller){
+        //If the playlist is different from the previous one
+        if (caller.getAttribute("id") !== currentPlaylist){
+          $("#shuffleType-random").prop('checked', true);
+          $('#category-div').html("");
+          if ($("#spreadoptions").is(':visible')){
+            $('#spreadoptions').slideToggle("fast");
+          }
+          if ($("#biasoptions").is(':visible')){
+            $('#biasoptions').slideToggle("fast");
+          }
+        }
         //Get tracklist id from html button element
         currentPlaylist = caller.getAttribute("id");
         var src = "https://embed.spotify.com/?uri=spotify:user:<%= user_id %>:playlist:"+ currentPlaylist + "&theme=white&view=coverart";
@@ -24,14 +35,7 @@
         player.setAttribute("allowtransparency", "true");
         player.setAttribute("src", src);
         $("#player-div").html(player);
-        $("#shuffleType-random").prop('checked', true);
-        $('#category-div').html("");
-        if ($("#spreadoptions").is(':visible')){
-          $('#spreadoptions').slideToggle("fast");
-        }
-        if ($("#biasoptions").is(':visible')){
-          $('#biasoptions').slideToggle("fast");
-        }
+
         //Call the get-tracks endpoint with the given playlist's id
         $.ajax({
           url: beginning + "/get-tracks/<%= user_id %>/" + currentPlaylist + "/<%= access_token %>",
