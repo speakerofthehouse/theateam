@@ -4,7 +4,7 @@
 h1 {
   text-align: center;
   font-size: large;
-  font-family: sans-serif;
+  font-family: Arial;
   padding-top: 25px;
   padding-bottom: 25px;
 }
@@ -15,14 +15,22 @@ body {
 h2 {
 
   font-size: medium;
-  font-family: sans-serif;
+  font-family: Arial;
 
 }
 
 ul {
   list-style-type: none;
   padding-left: 0px;
- 
+
+
+}
+
+
+.ellipsis{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /*iframe {
@@ -57,6 +65,8 @@ ul {
   overflow-y:scroll;
   height:530px;
   text-align: left;
+  font-family: Arial;
+
 }
 
 #scroll-div-shuffle {
@@ -68,6 +78,22 @@ ul {
   height:530px;
   text-align: center;
   padding-left:3%;
+  font-family: Arial;
+
+}
+
+#scroll-div-tl {
+  position: absolute;
+  width:97%;
+  bottom:25px;
+  overflow:hidden;
+  overflow-y:scroll;
+  height:530px;
+  text-align: left;
+  padding-left:3%;
+  font-family: Arial;
+
+
 }
 
 
@@ -84,6 +110,7 @@ ul {
   list-style:none;
   padding-left:0;
   text-align: center;
+  font-family: Arial;
 
 
 }
@@ -102,6 +129,8 @@ ul {
 
 
   border-radius: 25px;
+  font-family: Arial;
+
 
 }
 
@@ -116,6 +145,8 @@ ul {
   background-color: #f9f9f9;
   height:600px;
   border-radius: 25px;
+  font-family: Arial;
+
 
 
 }
@@ -132,6 +163,8 @@ ul {
   background-color: #f9f9f9;
 
   border-radius: 25px;
+  font-family: Arial;
+
 
 
 }
