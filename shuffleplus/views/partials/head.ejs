@@ -2,7 +2,7 @@
 <title>Shuffle+</title>
 <link type="text/css" rel="stylesheet" href="basicstyle.css" />
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script>
+<script src="pagecontroller.js">
       var currentPlaylist = "";
       var shuffleType = "random";
       var shuffleParam = "";
@@ -44,7 +44,7 @@
           $("#tracks").prepend(player);
           //Append the returned html to the tracklist div
         });
-      }
+      }n repo
 
       var shufflePlaylist = function(caller){
         $("#error_message").html("");

@@ -47,6 +47,31 @@ User Stories:
 
 6) As a runner, I want to listen to my favorite music so that I can let my mind drift in the music in the runs I do; 3 hours
 
+Repo Organization:
+-Root
+	-Contains README, project plan outline, test output screenshot, final submission pdf, and presentation slides + pdf
+-shuffleplus
+	-Contains main app scripts
+		-index.js
+		-shuffles.js
+	-Contains the package.json file for the node js app
+	-Contains asset subdirectories views, public, node_modules, test, and out
+-Views
+	-Contains two subdirectories. One for ejs pages and one for page partials
+-Public
+	-Contains the style sheet for the app
+-Node_modules
+	-Contains dependency files for the installed node js modules
+-Test
+	-Contains unit test script test/index.js
+-Out 
+	-Contains the output of the auto-doc app
+
+Instructions to Run App from the Directory:
+	-From the console, navigate to shuffleplus directory
+	-Run command "node index.js"
+	-Navigate to http://localhost:5000 in the browser
+
 
 
   
