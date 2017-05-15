@@ -2,7 +2,7 @@
 <div id="tracks">
 <ul>
 <% songs.forEach(function(song){ %>
-  <li class="ellipsis"><b><%= song.track.name %> :: </b><%= song.track.artists[0].name %></li>
+  <li class="ellipsis"><b><%= song.name %> :: </b><%= song.artists[0].name %></li>
 <% }); %>
 </ul>
 </div>

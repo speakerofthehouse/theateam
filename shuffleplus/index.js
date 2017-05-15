@@ -122,9 +122,16 @@ app.get('/callback', function(req, res) {
           var user_id = body.id;
           options.url = 'https://api.spotify.com/v1/users/' + user_id + '/playlists';
           request.get(options, function(error, response, body) {
+            //Filter out non user-created playslists
+            var playlists = [];
+            for (i = 0; i < body.items.length; i++){
+              if (body.items[i].owner.id === user_id){
+                playlists.push(body.items[i]);
+              }
+            }
             res.render('pages/main', {
               name: user_name,
-              playlists: body.items,
+              playlists: playlists,
               user_id: user_id,
               access_token: access_token,
               refresh_token: refresh_token,
@@ -166,30 +173,51 @@ app.get('/refresh_token/:refresh_token', function(req, res) {
 returns rendered HTML using the info returned **/
 app.get('/get-tracks/:user_id/:playlist_id/:access_token', function(req, res){
   console.log("Called get-tracks");
+  tracks = [];
   var playlist_id = req.params.playlist_id;
   var access_token = req.params.access_token;
   var user_id = req.params.user_id;
+  var playlistRead = false;
+  var done = false;
+  var offset = 0;
 
-  var options = {
-     url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks',
-     headers: { 'Authorization': 'Bearer ' + access_token },
-     json: true
-   };
+  while (!playlistRead){
+     var options = {
+        url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists/' + playlist_id + '/tracks?offset=' + offset,
+        headers: { 'Authorization': 'Bearer ' + access_token },
+        json: true
+      };
+     console.log(options.url);
+     request.get(options, function(error, response, body) {
+       if (!error && response.statusCode === 200){
+         var length = body.total;   //Length of playlist
+         console.log(length);
+         var remaining = length - offset;
 
-   //GET tracks
-   request.get(options, function(error, response, body) {
-     var entries = body.items;  //Array of playlist entry objects
-     var length = body.total;   //Length of playlist
-     var pl_tracks = []
-     for (i = 0; i < length; i++){
-       pl_tracks.push(entries[i].track);
-     }
-     tracks = pl_tracks;
-     res.render('partials/tracklist', {
-       songs: body.items,
-       user_id: user_id,
-       playlist_id: playlist_id
+         if (remaining < 100) {
+           console.log("Getting tracks " + offset + " through " + length);
+           for (i = 0; i < remaining; i++){ tracks.push(body.items[i].track); }
+           playlistRead = true;
+           done = true;
+         } else {
+           console.log("Getting tracks " + offset + " through " + (offset + 100).toString());
+           for (i = 0; i < 100; i++){ tracks.push(body.items[i].track); }
+           offset += 100;
+           done = true;
+         }
+       } else {
+         console.log(body);
+       }
      });
+     while (!done){
+       deasync.sleep(10);
+     }
+     done = false;
+   }
+   res.render('partials/tracklist', {
+     songs: tracks,
+     user_id: user_id,
+     playlist_id: playlist_id
    });
 });
 
